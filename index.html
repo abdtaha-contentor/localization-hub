@@ -1,607 +1,591 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.6">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Localization Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Slate & Indigo -->
+    <!-- Application Structure Plan: A client-centric "Localization Hub" with a two-tiered data structure. A top-level dropdown switches between "General Guidelines" and specific client profiles (Visa, Samsung, Dyson, Rusta). Selecting a client dynamically updates all content, pulling from client-specific overrides and falling back to general guidelines. New client-exclusive tabs for Terminology, Personas, Visuals, etc., are added. The AI Tone Advisor is enhanced to be client-aware, tailoring its advice based on the selected client's brand voice. This creates a powerful, scalable tool for a multi-client agency. -->
+    <!-- Visualization & Content Choices: Data is presented in interactive tabbed cards. The core logic is rewritten to handle the new data structure, merging general and client-specific rules on the fly. No charts are used, focusing on detailed textual guidelines and AI-powered dynamic content generation. All choices avoid SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        .tab-button.active {
+            border-color: #4f46e5;
+            color: #4f46e5;
+            background-color: #eef2ff;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #4f46e5;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
-<body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Interactive Localization Hub&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Chosen Palette: Slate &amp; Indigo --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Application Structure Plan: A client-centric "Localization Hub" with a two-tiered data structure. A top-level dropdown switches between "General Guidelines" and specific client profiles (Visa, Samsung, Dyson, Rusta). Selecting a client dynamically updates all content, pulling from client-specific overrides and falling back to general guidelines. New client-exclusive tabs for Terminology, Personas, Visuals, etc., are added. The AI Tone Advisor is enhanced to be client-aware, tailoring its advice based on the selected client's brand voice. This creates a powerful, scalable tool for a multi-client agency. --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Visualization &amp; Content Choices: Data is presented in interactive tabbed cards. The core logic is rewritten to handle the new data structure, merging general and client-specific rules on the fly. No charts are used, focusing on detailed textual guidelines and AI-powered dynamic content generation. All choices avoid SVG/Mermaid. --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter', sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.tab-button.active {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-color: #4f46e5;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #4f46e5;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #eef2ff;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.fade-in {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation: fadeIn 0.5s ease-in-out;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes fadeIn {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>from { opacity: 0; transform: translateY(10px); }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>to { opacity: 1; transform: translateY(0); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.spinner {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 2px solid #f3f3f3;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-top: 2px solid #4f46e5;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 50%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation: spin 1s linear infinite;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes spin {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>0% { transform: rotate(0deg); }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>100% { transform: rotate(360deg); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body class="bg-slate-50 text-slate-800"&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="container mx-auto p-4 md:p-8"&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;header class="text-center mb-8 md:mb-12"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1 class="text-3xl md:text-4xl font-bold text-slate-900"&gt;Interactive Localization Hub&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="mt-2 text-lg text-slate-600"&gt;Your dynamic, AI-powered reference for international content creation.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/header&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;label for="client-select" class="block text-sm font-medium text-slate-700 mb-2"&gt;Select Profile:&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;select id="client-select" class="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">             </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;label for="language-select" class="block text-sm font-medium text-slate-700 mb-2"&gt;Select Language:&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;select id="language-select" class="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;main class="space-y-12"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;section id="explorer" class="bg-white p-6 rounded-lg shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 id="explorer-title" class="text-2xl font-semibold text-slate-900 mb-4"&gt;Guideline Explorer&lt;/h2&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="language-details"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="tabs-container" class="border-b border-slate-200 mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;nav class="flex flex-wrap -mb-px" aria-label="Tabs"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/nav&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="tab-content" class="fade-in min-h-[200px]"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/section&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;section id="tone-advisor" class="bg-white p-6 rounded-lg shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-2xl font-semibold text-slate-900 mb-4"&gt;✨ AI Tone Advisor&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="text-slate-600 mb-6"&gt;Paste your text below to get AI-powered suggestions on how to align it with the selected profile's tone of voice.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="space-y-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;textarea id="tone-input" class="w-full p-2 border border-slate-300 rounded-md" rows="4" placeholder="Enter your text here..."&gt;&lt;/textarea&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button id="tone-submit" onclick="getToneAdvice()" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>Get Tone Advice</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="tone-output" class="p-4 bg-slate-50 rounded-lg hidden mt-4"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;section id="comparison" class="bg-white p-6 rounded-lg shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>&lt;h2 class="text-2xl font-semibold text-slate-900 mb-4"&gt;Cross-Market Comparison (General Guidelines)&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>&lt;p class="text-slate-600 mb-6"&gt;Compare a general linguistic or cultural rule across multiple languages. This view always uses the universal baseline guidelines.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>&lt;div class="grid md:grid-cols-2 gap-6 mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label for="comparison-select" class="block text-sm font-medium text-slate-700 mb-2"&gt;Select Style Point to Compare:&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;select id="comparison-select" class="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="relative"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label class="block text-sm font-medium text-slate-700 mb-2"&gt;Filter by Country:&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button id="country-filter-button" class="w-full bg-white p-2 border border-slate-300 rounded-md shadow-sm text-left flex justify-between items-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span id="country-filter-button-text"&gt;All Countries&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;svg class="w-5 h-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div id="country-filter-dropdown" class="absolute hidden z-10 w-full mt-1 bg-white border border-slate-300 rounded-md shadow-lg max-h-60 overflow-y-auto p-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="comparison-table-container" class="overflow-x-auto"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/main&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const localizationData = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>generalGuidelines: {},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>clientProfiles: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>"visa": {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>name: "Visa (Financial Services)",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>languages: {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>"Germany": {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>tone: { primary: "Secure, trustworthy, and professional.", formality: "`Sie` is mandatory across all content." },</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>legal: { disclaimers: "All promotional offers must include full terms and conditions link. Interest rates must be displayed as 'eff. Jahreszins'." }</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>terminology: { title: "Brand Terminology", terms: "`Visa Direct` and `Verified by Visa` are trademarks and must not be translated. `Contactless payment` translates to `kontaktloses Bezahlen`." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>personas: { title: "Target Audience", description: "Persona: 'The Secure Spender' (Age 30-60). Values security, reliability, and global acceptance. Content should emphasize fraud protection and convenience." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>visualGuidelines: { title: "Visual Guidelines", guidelines: "Use official Visa blue and gold. Photography should show modern, secure payment situations. Avoid showing cash." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>commonPitfalls: { title: "Common Pitfalls", pitfalls: "Do not make promises about credit approval. Avoid informal language that could undermine trust." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>contentTypes: { title: "E-commerce Content Guidelines", types: "**B2B Pages:** Formal, professional tone. **Cardholder Benefits:** Clear, benefit-oriented language, focusing on security and rewards." }</p>
-<p class="p1"><span class="Apple-converted-space">                </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                </span>"samsung": {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>name: "Samsung (Consumer Electronics)",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>languages: {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>"Germany": {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>tone: { primary: "Innovative, modern, and user-focused.", formality: "`Sie` for general marketing and product pages. `du` is approved for social media campaigns targeting younger audiences." }</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>terminology: { title: "Product Terminology", terms: "Product families like `Galaxy`, `Neo QLED`, and `Bespoke` are trademarks and never translated. Features like `SmartThings` are also trademarks." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>personas: { title: "Target Audience", description: "Persona: 'The Tech Enthusiast' (Age 25-45). Values cutting-edge features, specifications, and ecosystem integration. Content should be rich with technical details." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>visualGuidelines: { title: "Visual Guidelines", guidelines: "Use dynamic, high-quality product shots and lifestyle images showing seamless connectivity. Follow official brand color palettes." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>commonPitfalls: { title: "Common Pitfalls", pitfalls: "Ensure metric units are used for all specifications (e.g., cm for screen sizes, not inches)." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>contentTypes: { title: "E-commerce Content Guidelines", types: "**Product Detail Pages:** Use bullet points for key specs. **Promotional Banners:** Emphasize the core innovation or benefit clearly and concisely." }</p>
-<p class="p1"><span class="Apple-converted-space">                </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                </span>"dyson": {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>name: "Dyson (Home Appliances)",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>languages: {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>"Germany": {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>tone: { primary: "Engineering-focused, premium, and scientific.", formality: "`Sie` is mandatory. The tone should reflect expertise and precision." }</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>terminology: { title: "Technology Terminology", terms: "Core technologies like `Cyclone`, `Airwrap`, and `Supersonic` are trademarks. Use official German terms for features like `Laser-Stauberkennung`." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>personas: { title: "Target Audience", description: "Persona: 'The Design-Conscious Homeowner' (Age 35-60). Values performance, longevity, and industrial design. Content should highlight the science and problem-solving aspect." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>visualGuidelines: { title: "Visual Guidelines", guidelines: "Focus on clean, almost clinical imagery. Use cutaways and diagrams to explain the technology. Videos should be demonstrative." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>commonPitfalls: { title: "Common Pitfalls", pitfalls: "Avoid claims that sound like marketing fluff. Every statement should feel backed by engineering evidence." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>contentTypes: { title: "E-commerce Content Guidelines", types: "**Product Pages:** Lead with the core problem the technology solves. **Support Articles:** Provide clear, step-by-step instructions." }</p>
-<p class="p1"><span class="Apple-converted-space">                </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                </span>"rusta": {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>name: "Rusta (Home &amp; Leisure Retail)",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>languages: {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>"Germany": {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>tone: { primary: "Friendly, accessible, and value-driven.", formality: "Use `du` to maintain the informal and approachable brand voice from its Swedish origin." }</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>"Sweden": {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>tone: { formality: "`du` is always used." }</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>terminology: { title: "Product Terminology", terms: "Use simple, descriptive names for products. Avoid jargon. `Gör-det-själv` (DIY) is a key concept." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>personas: { title: "Target Audience", description: "Persona: 'The Practical Family' (Age 25-55). Values affordability, practicality, and finding good deals. Content should be straightforward and price-conscious." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>visualGuidelines: { title: "Visual Guidelines", guidelines: "Show products in real, everyday home settings. Emphasize price and value in promotional graphics. Use bright, welcoming colors." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>commonPitfalls: { title: "Common Pitfalls", pitfalls: "Do not try to sound too premium or exclusive; this goes against the brand's core values." },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>contentTypes: { title: "E-commerce Content Guidelines", types: "**Weekly Flyers:** Highlight deals and seasonal products. **Product Descriptions:** Be clear, concise, and mention the price and value proposition." }</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const fullGeneralData = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"Denmark": {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tone: { primary: "Direct and informal.", formality: "`du` (informal 'you') is the standard. The formal `De` is very rare." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>punctuation: { quotes: "Primary: `»...«` or `„...“`.", apostrophe: "For genitive of words ending in -s, -x, -z.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by a comma." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>formatting: { short_date_format: "DD.MM.YYYY", long_date_format: "D. MMMM Quy", timeFormat: "24-hour (e.g., 14:30)", decimal: ",", thousands: ".", currencySymbol: "kr.", currencyPlacement: "prefix", percentage: "Space before %." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grammar: { capitalization: "Sentence case for headlines. Days, months, nationalities are lowercase.", gender: "Two grammatical genders: common (`en`) and neuter (`et`).", hyphenation: "Compound words are generally closed.", sentence_structure: "V2 word order: the finite verb is always the second element." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contact: { address: "Name&lt;br&gt;Street Address House Number&lt;br&gt;Postal Code City&lt;br&gt;COUNTRY", phone: "+45 XX XX XX XX" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>legal: { data_privacy: "Subject to GDPR.", advertising_regulations: "Strict consumer protection laws.", disclaimers: "Disclaimers for promotions must be clear." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>culture: { colors: "Red and white are prominent.", gestures: "Follows general European norms." }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"Finland": {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tone: { primary: "Concise, direct, and reserved.", formality: "Clear distinction between `sinä` (informal) and `te` (formal/plural)." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>punctuation: { quotes: "Primary: `”...”`.", apostrophe: "For separating endings from abbreviations/foreign words.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting can be followed by a comma or exclamation mark." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>formatting: { short_date_format: "D.M.YYYY", long_date_format: "D. MMMM'ta' Quy", timeFormat: "24-hour with period separator (e.g., 15.30)", decimal: ",", thousands: " (space)", currencySymbol: "€", currencyPlacement: "suffix", percentage: "Space before %." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "No grammatical gender.", hyphenation: "Compound words are very common and written as one word.", sentence_structure: "Relatively free word order; SVO is neutral." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contact: { address: "Name&lt;br&gt;Street Address House Number&lt;br&gt;FI-Postal Code CITY", phone: "+358 XX XXX XXXX" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>legal: { data_privacy: "Subject to GDPR.", advertising_regulations: "Consumer Protection Act is stringent.", disclaimers: "Terms and Conditions must be easily accessible." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>culture: { colors: "Blue and white (national colors).", gestures: "Reserved." }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"France": {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tone: { primary: "Polite, structured, and can be formal.", formality: "`vous` (formal/plural) is standard. `tu` is informal." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>punctuation: { quotes: "Primary: `« ... »`.", apostrophe: "For elision.", colon_semicolon: "Space required before `;` and `:`. Used to introduce quotes.", exclamation_question: "Space required before `!` and `?`.", brackets: "Standard `()`.", greetings_closings: "Greeting usually followed by a comma." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>formatting: { short_date_format: "DD/MM/YYYY", long_date_format: "D MMMM Quy", timeFormat: "24-hour with `h` separator (e.g., 15 h 30)", decimal: ",", thousands: " (space)", currencySymbol: "€", currencyPlacement: "suffix", percentage: "Non-breaking space before %." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Two grammatical genders: masculine and feminine.", hyphenation: "Hyphens are used for specific compound nouns and verb-pronoun inversions.", sentence_structure: "Generally SVO. Adverbs typically follow the conjugated verb." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contact: { address: "Recipient Name&lt;br&gt;Building/Apt&lt;br&gt;Street Number Street Name&lt;br&gt;Postal Code CITY", phone: "+33 X XX XX XX XX" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>legal: { data_privacy: "GDPR enforced by CNIL.", advertising_regulations: "Loi Evin heavily restricts alcohol and tobacco advertising.", disclaimers: "Terms &amp; Conditions (CGU/CGV) must be in French." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>culture: { colors: "Blue, white, red (national flag).", gestures: "La bise is a common greeting." }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"Germany": {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tone: { primary: "Formal, direct, and precise.", formality: "Strict distinction. `Sie` (formal) is standard. `du` is informal." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>punctuation: { quotes: "Primary: `„...“`.", apostrophe: "For genitives of names ending in s, ß, x, z.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?`, `!` used sparingly.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by comma, next line starts lowercase." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>formatting: { short_date_format: "DD.MM.YYYY", long_date_format: "D. MMMM Quy", timeFormat: "24-hour (e.g., 15:30)", decimal: ",", thousands: ".", currencySymbol: "€", currencyPlacement: "suffix", percentage: "Space before %." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grammar: { capitalization: "All nouns are capitalized.", gender: "Three grammatical genders: masculine, feminine, and neuter.", hyphenation: "Compound words are famously written closed.", sentence_structure: "V2 word order in main clauses, verb at the end in subordinate clauses." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contact: { address: "Recipient Name&lt;br&gt;Street Name House Number&lt;br&gt;Postal Code City", phone: "+49 (XXX) XXXXXXX" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>legal: { data_privacy: "GDPR implemented via BDSG.", advertising_regulations: "Unfair Competition Act (UWG) is very strict.", disclaimers: "An `Impressum` is mandatory for almost all websites." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>culture: { colors: "Follows Western conventions.", gestures: "Punctuality is key." }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"Italy": {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tone: { primary: "Expressive and warm.", formality: "Formal `Lei` is standard in business." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>punctuation: { quotes: "Primary: `«...»`.", apostrophe: "For elision.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by a comma." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>formatting: { short_date_format: "DD/MM/YYYY", long_date_format: "D MMMM Quy", timeFormat: "24-hour (e.g., 15:30)", decimal: ",", thousands: ".", currencySymbol: "€", currencyPlacement: "suffix", percentage: "No space before % is common practice." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Two grammatical genders: masculine and feminine.", hyphenation: "Hyphenation is less common. Used for some compound adjectives or for clarity.", sentence_structure: "Primarily SVO, but flexible for emphasis. Adjectives generally follow nouns." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contact: { address: "Street Name, Number&lt;br&gt;Postal Code City (Province Abbreviation)", phone: "+39 XXX XXXXXXX" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>legal: { data_privacy: "Subject to GDPR.", advertising_regulations: "Clear and transparent pricing is mandatory.", disclaimers: "VAT number (`Partita IVA`) must be displayed on business websites." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>culture: { colors: "Green, white, and red (national flag).", gestures: "Hand gestures are essential." }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"Netherlands": {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tone: { primary: "Direct and efficient.", formality: "`u` is formal, `je` is common." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>punctuation: { quotes: "Primary: `“...”`.", apostrophe: "For possessives and plurals of abbreviations.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by a comma." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>formatting: { short_date_format: "D-M-YYYY", long_date_format: "D MMMM Quy", timeFormat: "24-hour (e.g., 14:30)", decimal: ",", thousands: ".", currencySymbol: "€", currencyPlacement: "prefix", percentage: "Space before %." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Two grammatical genders: common (`de`-words) and neuter (`het`-words).", hyphenation: "Compounds are generally closed.", sentence_structure: "V2 word order in main clauses, verb at the end in subordinate clauses." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contact: { address: "Street Name House Number&lt;br&gt;Postal Code<span class="Apple-converted-space">  </span>CITY", phone: "+31 6 XXXXXXXX" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>legal: { data_privacy: "GDPR implemented as `AVG`.", advertising_regulations: "Strict rules against misleading or aggressive advertising.", disclaimers: "Chamber of Commerce (`KvK`) number must be displayed." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>culture: { colors: "Orange is the national color.", gestures: "Direct eye contact is expected." }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"Norway": {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tone: { primary: "Direct and egalitarian.", formality: "`du` is standard." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>punctuation: { quotes: "Primary: `«...»`.", apostrophe: "For genitives of words ending in -s, -x, -z.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by a comma." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>formatting: { short_date_format: "DD.MM.YYYY", long_date_format: "D. MMMM Quy", timeFormat: "24-hour with period separator (e.g., 14.30)", decimal: ",", thousands: " (space) or .", currencySymbol: "kr", currencyPlacement: "prefix", percentage: "Space before %." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Three genders (masculine, feminine, neuter).", hyphenation: "Compound words are written as one word.", sentence_structure: "V2 word order (verb is the second element)." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contact: { address: "Name&lt;br&gt;Street Address House Number&lt;br&gt;Postal Code CITY", phone: "+47 XXX XX XXX" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>legal: { data_privacy: "GDPR is part of Norwegian law.", advertising_regulations: "Marketing Control Act requires transparency.", disclaimers: "Clear information on consumer rights." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>culture: { colors: "Nature-based colors are popular.", gestures: "General European norms." }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"Poland": {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tone: { primary: "Respectful and formal.", formality: "Titles `Pan`/`Pani` are standard." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>punctuation: { quotes: "Primary: `„...”`.", apostrophe: "Rarely used.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by comma or exclamation mark." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>formatting: { short_date_format: "DD.MM.YYYY", long_date_format: "D MMMM Quy", timeFormat: "24-hour (e.g., 15:30)", decimal: ",", thousands: " (space)", currencySymbol: "zł", currencyPlacement: "suffix", percentage: "No space before % is common practice." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Three main genders with additional complexities.", hyphenation: "Hyphens often used with compound adjectives.", sentence_structure: "Highly flexible word order, used for emphasis." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contact: { address: "Street Name Number, Apt. Number&lt;br&gt;Postal Code CITY", phone: "+48 XXX XXX XXX" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>legal: { data_privacy: "GDPR is known as `RODO`.", advertising_regulations: "Act on Combating Unfair Competition applies.", disclaimers: "Specific information requirements for e-commerce." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>culture: { colors: "White and red (national colors).", gestures: "Firm handshake is standard." }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"Portugal": {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tone: { primary: "Polite and somewhat formal.", formality: "`o senhor`/`a senhora` is formal." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>punctuation: { quotes: "Primary: `«...»`.", apostrophe: "Rarely used.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by a comma or colon." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>formatting: { short_date_format: "DD/MM/YYYY", long_date_format: "D 'de' MMMM 'de' Quy", timeFormat: "24-hour (e.g., 15:30)", decimal: ",", thousands: ".", currencySymbol: "€", currencyPlacement: "suffix", percentage: "No space before % is common practice." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Two grammatical genders: masculine and feminine.", hyphenation: "Used in some compound nouns and to attach clitic pronouns to verbs.", sentence_structure: "Generally SVO. Adjectives usually follow nouns." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contact: { address: "Street Type Street Name, Number Floor-Direction&lt;br&gt;Postal Code-XXX CITY", phone: "+351 XXX XXX XXX" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>legal: { data_privacy: "Subject to GDPR.", advertising_regulations: "Advertising Code requires truthfulness.", disclaimers: "Complaints book (`Livro de Reclamações`) is mandatory." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>culture: { colors: "Green and red (national colors).", gestures: "Generally more reserved than Spanish." }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"Spain": {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tone: { primary: "Professional and polite.", formality: "Formal `usted` is standard for business." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>punctuation: { quotes: "Primary: `«...»`.", apostrophe: "Rarely used.", colon_semicolon: "Standard usage.", exclamation_question: "Mandatory inverted marks: `¿...?` and `¡...!`", brackets: "Standard `()`.", greetings_closings: "Greeting often followed by a colon." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>formatting: { short_date_format: "DD/MM/YYYY", long_date_format: "D 'de' MMMM 'de' Quy", timeFormat: "24-hour (e.g., 15:30)", decimal: ",", thousands: ".", currencySymbol: "€", currencyPlacement: "suffix", percentage: "No space before % is common practice." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Two grammatical genders: masculine and feminine.", hyphenation: "Not as common as in English.", sentence_structure: "SVO is standard but flexible for emphasis." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contact: { address: "Street Name, Number, Floor/Door&lt;br&gt;Postal Code City&lt;br&gt;Province", phone: "+34 XXX XXX XXX" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>legal: { data_privacy: "GDPR implemented via `LOPDGDD`.", advertising_regulations: "General Advertising Law prohibits misleading advertising.", disclaimers: "Company registration data and tax ID (`NIF`) often required." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>culture: { colors: "Red and yellow (national flag).", gestures: "The 'OK' sign can be vulgar." }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"Sweden": {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tone: { primary: "Consensus-oriented and informal.", formality: "`du` is standard." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>punctuation: { quotes: "Primary: `”...”`.", apostrophe: "Not for genitives (use -s suffix); used for some abbreviations.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting usually followed by an exclamation mark." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>formatting: { short_date_format: "YYYY-MM-DD", long_date_format: "D MMMM Quy", timeFormat: "24-hour with period separator (e.g., 14.30)", decimal: ",", thousands: " (space)", currencySymbol: "kr", currencyPlacement: "suffix", percentage: "Space before %." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Two grammatical genders: common (`en`) and neuter (`ett`).", hyphenation: "Compound words are written as one word.", sentence_structure: "V2 word order (verb is the second element)." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contact: { address: "Name&lt;br&gt;Street Address House Number&lt;br&gt;SE-Postal Code CITY&lt;br&gt;SWEDEN", phone: "+46 (0)X XXX XX XX" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>legal: { data_privacy: "Subject to GDPR.", advertising_regulations: "The Marketing Act requires advertising to be truthful.", disclaimers: "Clear disclosure of sponsored content is required." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>culture: { colors: "Blue and yellow (national colors).", gestures: "Reserved. Values `lagom` (moderation)." }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p1"><span class="Apple-converted-space">        </span>localizationData.generalGuidelines = fullGeneralData;</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>let currentState = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>selectedClient: 'generalGuidelines',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>selectedLanguage: 'Germany',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>selectedTab: 'tone',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>selectedComparison: 'short_date_format',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>selectedCountries: Object.keys(localizationData.generalGuidelines).sort()</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const clientSelect = document.getElementById('client-select');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const languageSelect = document.getElementById('language-select');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const tabsContainer = document.getElementById('tabs-container').querySelector('nav');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const tabContent = document.getElementById('tab-content');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const comparisonSelect = document.getElementById('comparison-select');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const comparisonTableContainer = document.getElementById('comparison-table-container');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const countryFilterButton = document.getElementById('country-filter-button');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const countryFilterDropdown = document.getElementById('country-filter-dropdown');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const explorerTitle = document.getElementById('explorer-title');</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const tabIcons = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>tone: '“',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>punctuation: '§',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>formatting: '123',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grammar: '¶',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>measures: '📏',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>contact: '＠',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>legal: '⚖️',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>culture: '🌍',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>terminology: '📖',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>personas: '👥',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>visualGuidelines: '🖼️',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>commonPitfalls: '⚠️',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>contentTypes: '📄'</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function populateClientSelect() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let optionsHTML = `&lt;option value="generalGuidelines"&gt;General Guidelines&lt;/option&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>for(const [key, value] of Object.entries(localizationData.clientProfiles)) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>optionsHTML += `&lt;option value="${key}"&gt;${value.name}&lt;/option&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>clientSelect.innerHTML = optionsHTML;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function populateLanguageSelect() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const languages = Object.keys(localizationData.generalGuidelines).sort();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>languageSelect.innerHTML = languages.map(lang =&gt; `&lt;option value="${lang}" ${lang === currentState.selectedLanguage ? 'selected' : ''}&gt;${lang}&lt;/option&gt;`).join('');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function populateComparisonSelect() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const comparisonPoints = {<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>'short_date_format': 'Short Date Format', 'long_date_format': 'Long Date Format', 'timeFormat': 'Time Format', 'decimal': 'Decimal Separator', 'thousands': 'Thousands Separator', 'currencySymbol': 'Currency Symbol', 'currencyPlacement': 'Currency Placement', 'percentage': 'Percentage Symbol', 'quotes': 'Quotation Marks', 'formality': 'Formality (Pronoun)', 'capitalization': 'Capitalization (Headlines)', 'gender': 'Grammatical Gender', 'hyphenation': 'Hyphenation &amp; Compounds', 'sentence_structure': 'Sentence Structure', 'data_privacy': 'Data Privacy', 'advertising_regulations': 'Advertising Regulations', 'distance': 'Distance Units', 'weight': 'Weight Units', 'volume': 'Volume Units', 'temperature': 'Temperature Units', 'area': 'Area Units', 'speed': 'Speed Units'</p>
-<p class="p1"><span class="Apple-converted-space">            </span>};</p>
-<p class="p1"><span class="Apple-converted-space">            </span>comparisonSelect.innerHTML = Object.entries(comparisonPoints).map(([key, value]) =&gt; `&lt;option value="${key}" ${key === currentState.selectedComparison ? 'selected' : ''}&gt;${value}&lt;/option&gt;`).join('');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function populateCountryFilter() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const allLanguages = Object.keys(localizationData.generalGuidelines).sort();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let filterHTML = `&lt;div class="p-2 flex justify-between border-b border-gray-200"&gt;&lt;button id="filter-select-all" class="text-sm text-indigo-600 hover:text-indigo-800"&gt;Select All&lt;/button&gt;&lt;button id="filter-deselect-all" class="text-sm text-indigo-600 hover:text-indigo-800"&gt;Deselect All&lt;/button&gt;&lt;/div&gt;&lt;div class="space-y-1 p-1"&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>filterHTML += allLanguages.map(lang =&gt; `&lt;div class="flex items-center p-1 rounded-md hover:bg-slate-100"&gt;&lt;input id="filter-${lang}" name="country-filter" type="checkbox" value="${lang}" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" checked&gt;&lt;label for="filter-${lang}" class="ml-2 block text-sm text-gray-900 w-full cursor-pointer"&gt;${lang}&lt;/label&gt;&lt;/div&gt;`).join('');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>filterHTML += `&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>countryFilterDropdown.innerHTML = filterHTML;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('input[name="country-filter"]').forEach(checkbox =&gt; checkbox.addEventListener('change', handleCountryFilterChange));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('filter-select-all').addEventListener('click', () =&gt; { document.querySelectorAll('input[name="country-filter"]').forEach(checkbox =&gt; checkbox.checked = true); handleCountryFilterChange(); });</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('filter-deselect-all').addEventListener('click', () =&gt; { document.querySelectorAll('input[name="country-filter"]').forEach(checkbox =&gt; checkbox.checked = false); handleCountryFilterChange(); });</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function handleCountryFilterChange() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const selected = Array.from(document.querySelectorAll('input[name="country-filter"]:checked')).map(cb =&gt; cb.value);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>currentState.selectedCountries = selected;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>renderComparisonTable();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>updateFilterButtonText();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function updateFilterButtonText() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const count = currentState.selectedCountries.length;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const total = Object.keys(localizationData.generalGuidelines).length;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const buttonText = document.getElementById('country-filter-button-text');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (count === 0) buttonText.textContent = 'Select Countries';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>else if (count === total) buttonText.textContent = 'All Countries';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>else buttonText.textContent = `${count} Countries Selected`;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function getSectionData(section) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const lang = currentState.selectedLanguage;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const client = currentState.selectedClient;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const generalData = localizationData.generalGuidelines[lang]?.[section] || {};</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let clientData = {};</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(client !== 'generalGuidelines') {</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>clientData = localizationData.clientProfiles[client]?.languages[lang]?.[section] || {};</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>return {...generalData, ...clientData};</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function renderTabs() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const generalTabs = ['tone', 'punctuation', 'formatting', 'grammar', 'measures', 'contact', 'legal', 'culture'];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const clientTabs = ['terminology', 'personas', 'visualGuidelines', 'commonPitfalls', 'contentTypes'];</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>let tabsToRender = generalTabs;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (currentState.selectedClient !== 'generalGuidelines') {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tabsToRender = [...generalTabs, ...clientTabs];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>tabsContainer.innerHTML = tabsToRender.map(key =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return `</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="handleTabClick('${key}')" class="tab-button ${currentState.selectedTab === key ? 'active' : ''} flex items-center gap-2 whitespace-nowrap border-b-2 py-3 px-4 text-sm font-medium border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                     </span>&lt;span class="text-indigo-600 font-bold"&gt;${tabIcons[key]}&lt;/span&gt; ${key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>`}).join('');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function renderTabContent() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let tabData;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const generalTabs = ['tone', 'punctuation', 'formatting', 'grammar', 'measures', 'contact', 'legal', 'culture'];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (generalTabs.includes(currentState.selectedTab)) {</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>tabData = getSectionData(currentState.selectedTab);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else if (currentState.selectedClient !== 'generalGuidelines') {</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>tabData = localizationData.clientProfiles[currentState.selectedClient][currentState.selectedTab];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!tabData) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tabContent.innerHTML = '&lt;p&gt;No data available for this section.&lt;/p&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>let contentHTML = '&lt;div class="space-y-4"&gt;';</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(tabData.title &amp;&amp; tabData.description) { // For Persona-like sections</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>contentHTML += `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="p-4 bg-slate-50 rounded-lg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h4 class="font-semibold text-slate-800 capitalize"&gt;${tabData.title}&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-slate-600 mt-1 whitespace-pre-line"&gt;${tabData.description}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else if(tabData.title &amp;&amp; tabData.guidelines) { // for Visuals</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>contentHTML += `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="p-4 bg-slate-50 rounded-lg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h4 class="font-semibold text-slate-800 capitalize"&gt;${tabData.title}&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-slate-600 mt-1 whitespace-pre-line"&gt;${tabData.guidelines}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else if(tabData.title &amp;&amp; tabData.pitfalls) { // for Pitfalls</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>contentHTML += `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="p-4 bg-slate-50 rounded-lg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h4 class="font-semibold text-slate-800 capitalize"&gt;${tabData.title}&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-slate-600 mt-1 whitespace-pre-line"&gt;${tabData.pitfalls}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else if(tabData.title &amp;&amp; tabData.terms) { // for Terminology</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>contentHTML += `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="p-4 bg-slate-50 rounded-lg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h4 class="font-semibold text-slate-800 capitalize"&gt;${tabData.title}&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-slate-600 mt-1 whitespace-pre-line"&gt;${tabData.terms}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else if(tabData.title &amp;&amp; tabData.types) { // For Content Types</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contentHTML += `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="p-4 bg-slate-50 rounded-lg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h4 class="font-semibold text-slate-800 capitalize"&gt;${tabData.title}&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="text-slate-600 mt-1 whitespace-pre-line"&gt;${tabData.types.replace(/\*\*/g, '&lt;strong class="font-semibold text-slate-700"&gt;')}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;`;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>for (const [key, value] of Object.entries(tabData)) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>contentHTML += `</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="p-4 bg-slate-50 rounded-lg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h4 class="font-semibold text-slate-800 capitalize"&gt;${key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1')}&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-slate-600 mt-1"&gt;${value}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (currentState.selectedTab === 'culture') {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contentHTML += `&lt;div id="culture-insights-container" class="mt-4"&gt;&lt;button id="culture-btn" onclick="getCulturalInsights()" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"&gt;✨ Generate Cultural Insights&lt;/button&gt;&lt;div id="culture-output" class="p-4 bg-indigo-50 text-indigo-800 rounded-lg hidden mt-4"&gt;&lt;/div&gt;&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>contentHTML += '&lt;/div&gt;';</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>tabContent.innerHTML = contentHTML;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>tabContent.classList.remove('fade-in');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>void tabContent.offsetWidth;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>tabContent.classList.add('fade-in');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function renderComparisonTable() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const topicKey = currentState.selectedComparison;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let tableHTML = `&lt;div class="relative overflow-x-auto shadow-md sm:rounded-lg"&gt;&lt;table class="w-full text-sm text-left text-slate-500"&gt;&lt;thead class="text-xs text-slate-700 uppercase bg-slate-100"&gt;&lt;tr&gt;&lt;th scope="col" class="px-6 py-3"&gt;Language&lt;/th&gt;&lt;th scope="col" class="px-6 py-3"&gt;Guideline&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const languagesToRender = currentState.selectedCountries.sort();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(languagesToRender.length === 0){</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tableHTML += `&lt;tr&gt;&lt;td colspan="2" class="text-center p-4"&gt;No countries selected.&lt;/td&gt;&lt;/tr&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>languagesToRender.forEach(lang =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>let value = 'N/A';</p>
-<p class="p1"><span class="Apple-converted-space">                     </span>for (const category of ['tone', 'punctuation', 'formatting', 'grammar', 'measures', 'legal']) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>if (localizationData.generalGuidelines[lang]?.[category]?.[topicKey]) {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>value = localizationData.generalGuidelines[lang][category][topicKey];</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>break;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (topicKey === 'thousands' &amp;&amp; value === ' ') { value = '[space]'; }</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>tableHTML += `&lt;tr class="bg-white border-b hover:bg-slate-50"&gt;&lt;th scope="row" class="px-6 py-4 font-medium text-slate-900 whitespace-nowrap"&gt;${lang}&lt;/th&gt;&lt;td class="px-6 py-4"&gt;${value}&lt;/td&gt;&lt;/tr&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">           </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>tableHTML += `&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>comparisonTableContainer.innerHTML = tableHTML;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function handleTabClick(tab) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>currentState.selectedTab = tab;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>renderTabs();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>renderTabContent();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function updateUI() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const clientName = currentState.selectedClient === 'generalGuidelines' ? 'General Guidelines' : localizationData.clientProfiles[currentState.selectedClient].name;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>explorerTitle.textContent = `${clientName}: Guideline Explorer`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>renderTabs();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>renderTabContent();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>clientSelect.addEventListener('change', (e) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>currentState.selectedClient = e.target.value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>currentState.selectedTab = 'tone';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>updateUI();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>languageSelect.addEventListener('change', (e) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>currentState.selectedLanguage = e.target.value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const generalTabs = ['tone', 'punctuation', 'formatting', 'grammar', 'measures', 'contact', 'legal', 'culture'];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const clientTabs = ['terminology', 'personas', 'visualGuidelines', 'commonPitfalls', 'contentTypes'];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const availableTabs = currentState.selectedClient === 'generalGuidelines' ? generalTabs : [...generalTabs, ...clientTabs];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!availableTabs.includes(currentState.selectedTab)) {</p>
-<p class="p1"><span class="Apple-converted-space">               </span>currentState.selectedTab = 'tone';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>updateUI();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>comparisonSelect.addEventListener('change', (e) =&gt; { currentState.selectedComparison = e.target.value; renderComparisonTable(); });</p>
-<p class="p1"><span class="Apple-converted-space">        </span>countryFilterButton.addEventListener('click', (event) =&gt; { event.stopPropagation(); countryFilterDropdown.classList.toggle('hidden'); });</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.addEventListener('click', (e) =&gt; { if (!countryFilterButton.contains(e.target) &amp;&amp; !countryFilterDropdown.contains(e.target)) { countryFilterDropdown.classList.add('hidden'); } });</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>async function callGemini(prompt, button, outputElement) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const originalButtonText = button.innerHTML;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>button.disabled = true; button.innerHTML = '&lt;div class="spinner"&gt;&lt;/div&gt; Generating...';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>outputElement.classList.remove('hidden'); outputElement.innerHTML = '&lt;div class="flex justify-center items-center"&gt;&lt;div class="spinner"&gt;&lt;/div&gt;&lt;span class="ml-2"&gt;Fetching AI insights...&lt;/span&gt;&lt;/div&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const apiKey = ""; const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };</p>
-<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const result = await response.json();</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (result.candidates &amp;&amp; result.candidates.length &gt; 0 &amp;&amp; result.candidates[0].content &amp;&amp; result.candidates[0].content.parts &amp;&amp; result.candidates[0].content.parts.length &gt; 0) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>let text = result.candidates[0].content.parts[0].text.replace(/\n\*/g, '&lt;/li&gt;&lt;li&gt;').replace(/\* /g, '&lt;li&gt;').replace(/&lt;\/li&gt;&lt;li&gt;/g, '&lt;/li&gt;&lt;li&gt;').replace(/^&lt;li&gt;/, '&lt;ul&gt;&lt;li&gt;') + '&lt;/li&gt;&lt;/ul&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>outputElement.innerHTML = text;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>} else { outputElement.textContent = "Sorry, couldn't get a response. Please try again later."; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) { console.error("Gemini API call failed:", error); outputElement.textContent = "An error occurred. Please check the console for details.";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} finally { button.disabled = false; button.innerHTML = originalButtonText; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>async function getToneAdvice() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const toneInput = document.getElementById('tone-input'); const userText = toneInput.value.trim();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!userText) { const toneOutput = document.getElementById('tone-output'); toneOutput.classList.remove('hidden'); toneOutput.textContent = "Please enter some text to analyze."; return; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const toneData = getSectionData('tone');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const toneDescription = toneData.primary + " " + toneData.formality;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const prompt = `As an expert in localization for ${currentState.selectedLanguage}, review the following text: "${userText}". The target tone is: "${toneDescription}". Provide clear, actionable suggestions in bullet points on how to better align the text with this tone. If the text is already well-aligned, confirm that and explain why.`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>await callGemini(prompt, document.getElementById('tone-submit'), document.getElementById('tone-output'));</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>async function getCulturalInsights() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const prompt = `You are a localization expert. Provide 3 key cultural insights for a content writer creating marketing material for ${currentState.selectedLanguage}. Focus on humor, sensitive topics, common values, and important holidays or events. Present these in bullet points.`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>await callGemini(prompt, document.getElementById('culture-btn'), document.getElementById('culture-output'));</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function init() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>populateClientSelect();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>populateLanguageSelect();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>populateComparisonSelect();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>populateCountryFilter();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>updateFilterButtonText();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>updateUI();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>renderComparisonTable();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.onload = init;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-8 md:mb-12">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Interactive Localization Hub</h1>
+            <p class="mt-2 text-lg text-slate-600">Your dynamic, AI-powered reference for international content creation.</p>
+        </header>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div>
+                <label for="client-select" class="block text-sm font-medium text-slate-700 mb-2">Select Profile:</label>
+                <select id="client-select" class="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                </select>
+            </div>
+             <div>
+                <label for="language-select" class="block text-sm font-medium text-slate-700 mb-2">Select Language:</label>
+                <select id="language-select" class="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                </select>
+            </div>
+        </div>
+
+
+        <main class="space-y-12">
+            
+            <section id="explorer" class="bg-white p-6 rounded-lg shadow-sm">
+                <h2 id="explorer-title" class="text-2xl font-semibold text-slate-900 mb-4">Guideline Explorer</h2>
+                
+                <div id="language-details">
+                    <div id="tabs-container" class="border-b border-slate-200 mb-6">
+                        <nav class="flex flex-wrap -mb-px" aria-label="Tabs">
+                        </nav>
+                    </div>
+                    <div id="tab-content" class="fade-in min-h-[200px]">
+                    </div>
+                </div>
+            </section>
+            
+            <section id="tone-advisor" class="bg-white p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-semibold text-slate-900 mb-4">✨ AI Tone Advisor</h2>
+                <p class="text-slate-600 mb-6">Paste your text below to get AI-powered suggestions on how to align it with the selected profile's tone of voice.</p>
+                <div class="space-y-4">
+                    <textarea id="tone-input" class="w-full p-2 border border-slate-300 rounded-md" rows="4" placeholder="Enter your text here..."></textarea>
+                    <button id="tone-submit" onclick="getToneAdvice()" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Get Tone Advice
+                    </button>
+                    <div id="tone-output" class="p-4 bg-slate-50 rounded-lg hidden mt-4"></div>
+                </div>
+            </section>
+
+            <section id="comparison" class="bg-white p-6 rounded-lg shadow-sm">
+                 <h2 class="text-2xl font-semibold text-slate-900 mb-4">Cross-Market Comparison (General Guidelines)</h2>
+                 <p class="text-slate-600 mb-6">Compare a general linguistic or cultural rule across multiple languages. This view always uses the universal baseline guidelines.</p>
+                 <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label for="comparison-select" class="block text-sm font-medium text-slate-700 mb-2">Select Style Point to Compare:</label>
+                        <select id="comparison-select" class="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        </select>
+                    </div>
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Filter by Country:</label>
+                        <button id="country-filter-button" class="w-full bg-white p-2 border border-slate-300 rounded-md shadow-sm text-left flex justify-between items-center">
+                            <span id="country-filter-button-text">All Countries</span>
+                            <svg class="w-5 h-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <div id="country-filter-dropdown" class="absolute hidden z-10 w-full mt-1 bg-white border border-slate-300 rounded-md shadow-lg max-h-60 overflow-y-auto p-2">
+                        </div>
+                    </div>
+                 </div>
+
+                <div id="comparison-table-container" class="overflow-x-auto">
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        const localizationData = {
+            generalGuidelines: {},
+            clientProfiles: {
+                "visa": {
+                    name: "Visa (Financial Services)",
+                    languages: {
+                        "Germany": {
+                            tone: { primary: "Secure, trustworthy, and professional.", formality: "`Sie` is mandatory across all content." },
+                            legal: { disclaimers: "All promotional offers must include full terms and conditions link. Interest rates must be displayed as 'eff. Jahreszins'." }
+                        }
+                    },
+                    terminology: { title: "Brand Terminology", terms: "`Visa Direct` and `Verified by Visa` are trademarks and must not be translated. `Contactless payment` translates to `kontaktloses Bezahlen`." },
+                    personas: { title: "Target Audience", description: "Persona: 'The Secure Spender' (Age 30-60). Values security, reliability, and global acceptance. Content should emphasize fraud protection and convenience." },
+                    visualGuidelines: { title: "Visual Guidelines", guidelines: "Use official Visa blue and gold. Photography should show modern, secure payment situations. Avoid showing cash." },
+                    commonPitfalls: { title: "Common Pitfalls", pitfalls: "Do not make promises about credit approval. Avoid informal language that could undermine trust." },
+                    contentTypes: { title: "E-commerce Content Guidelines", types: "**B2B Pages:** Formal, professional tone. **Cardholder Benefits:** Clear, benefit-oriented language, focusing on security and rewards." }
+                },
+                "samsung": {
+                    name: "Samsung (Consumer Electronics)",
+                    languages: {
+                        "Germany": {
+                            tone: { primary: "Innovative, modern, and user-focused.", formality: "`Sie` for general marketing and product pages. `du` is approved for social media campaigns targeting younger audiences." }
+                        }
+                    },
+                    terminology: { title: "Product Terminology", terms: "Product families like `Galaxy`, `Neo QLED`, and `Bespoke` are trademarks and never translated. Features like `SmartThings` are also trademarks." },
+                    personas: { title: "Target Audience", description: "Persona: 'The Tech Enthusiast' (Age 25-45). Values cutting-edge features, specifications, and ecosystem integration. Content should be rich with technical details." },
+                    visualGuidelines: { title: "Visual Guidelines", guidelines: "Use dynamic, high-quality product shots and lifestyle images showing seamless connectivity. Follow official brand color palettes." },
+                    commonPitfalls: { title: "Common Pitfalls", pitfalls: "Ensure metric units are used for all specifications (e.g., cm for screen sizes, not inches)." },
+                    contentTypes: { title: "E-commerce Content Guidelines", types: "**Product Detail Pages:** Use bullet points for key specs. **Promotional Banners:** Emphasize the core innovation or benefit clearly and concisely." }
+                },
+                "dyson": {
+                    name: "Dyson (Home Appliances)",
+                    languages: {
+                        "Germany": {
+                            tone: { primary: "Engineering-focused, premium, and scientific.", formality: "`Sie` is mandatory. The tone should reflect expertise and precision." }
+                        }
+                    },
+                    terminology: { title: "Technology Terminology", terms: "Core technologies like `Cyclone`, `Airwrap`, and `Supersonic` are trademarks. Use official German terms for features like `Laser-Stauberkennung`." },
+                    personas: { title: "Target Audience", description: "Persona: 'The Design-Conscious Homeowner' (Age 35-60). Values performance, longevity, and industrial design. Content should highlight the science and problem-solving aspect." },
+                    visualGuidelines: { title: "Visual Guidelines", guidelines: "Focus on clean, almost clinical imagery. Use cutaways and diagrams to explain the technology. Videos should be demonstrative." },
+                    commonPitfalls: { title: "Common Pitfalls", pitfalls: "Avoid claims that sound like marketing fluff. Every statement should feel backed by engineering evidence." },
+                    contentTypes: { title: "E-commerce Content Guidelines", types: "**Product Pages:** Lead with the core problem the technology solves. **Support Articles:** Provide clear, step-by-step instructions." }
+                },
+                "rusta": {
+                    name: "Rusta (Home & Leisure Retail)",
+                    languages: {
+                        "Germany": {
+                            tone: { primary: "Friendly, accessible, and value-driven.", formality: "Use `du` to maintain the informal and approachable brand voice from its Swedish origin." }
+                        },
+                        "Sweden": {
+                            tone: { formality: "`du` is always used." }
+                        }
+                    },
+                    terminology: { title: "Product Terminology", terms: "Use simple, descriptive names for products. Avoid jargon. `Gör-det-själv` (DIY) is a key concept." },
+                    personas: { title: "Target Audience", description: "Persona: 'The Practical Family' (Age 25-55). Values affordability, practicality, and finding good deals. Content should be straightforward and price-conscious." },
+                    visualGuidelines: { title: "Visual Guidelines", guidelines: "Show products in real, everyday home settings. Emphasize price and value in promotional graphics. Use bright, welcoming colors." },
+                    commonPitfalls: { title: "Common Pitfalls", pitfalls: "Do not try to sound too premium or exclusive; this goes against the brand's core values." },
+                    contentTypes: { title: "E-commerce Content Guidelines", types: "**Weekly Flyers:** Highlight deals and seasonal products. **Product Descriptions:** Be clear, concise, and mention the price and value proposition." }
+                }
+            }
+        };
+
+        const fullGeneralData = {
+            "Denmark": {
+                tone: { primary: "Direct and informal.", formality: "`du` (informal 'you') is the standard. The formal `De` is very rare." },
+                punctuation: { quotes: "Primary: `»...«` or `„...“`.", apostrophe: "For genitive of words ending in -s, -x, -z.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by a comma." },
+                formatting: { short_date_format: "DD.MM.YYYY", long_date_format: "D. MMMM Quy", timeFormat: "24-hour (e.g., 14:30)", decimal: ",", thousands: ".", currencySymbol: "kr.", currencyPlacement: "prefix", percentage: "Space before %." },
+                grammar: { capitalization: "Sentence case for headlines. Days, months, nationalities are lowercase.", gender: "Two grammatical genders: common (`en`) and neuter (`et`).", hyphenation: "Compound words are generally closed.", sentence_structure: "V2 word order: the finite verb is always the second element." },
+                measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },
+                contact: { address: "Name<br>Street Address House Number<br>Postal Code City<br>COUNTRY", phone: "+45 XX XX XX XX" },
+                legal: { data_privacy: "Subject to GDPR.", advertising_regulations: "Strict consumer protection laws.", disclaimers: "Disclaimers for promotions must be clear." },
+                culture: { colors: "Red and white are prominent.", gestures: "Follows general European norms." }
+            },
+            "Finland": {
+                tone: { primary: "Concise, direct, and reserved.", formality: "Clear distinction between `sinä` (informal) and `te` (formal/plural)." },
+                punctuation: { quotes: "Primary: `”...”`.", apostrophe: "For separating endings from abbreviations/foreign words.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting can be followed by a comma or exclamation mark." },
+                formatting: { short_date_format: "D.M.YYYY", long_date_format: "D. MMMM'ta' Quy", timeFormat: "24-hour with period separator (e.g., 15.30)", decimal: ",", thousands: " (space)", currencySymbol: "€", currencyPlacement: "suffix", percentage: "Space before %." },
+                grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "No grammatical gender.", hyphenation: "Compound words are very common and written as one word.", sentence_structure: "Relatively free word order; SVO is neutral." },
+                measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },
+                contact: { address: "Name<br>Street Address House Number<br>FI-Postal Code CITY", phone: "+358 XX XXX XXXX" },
+                legal: { data_privacy: "Subject to GDPR.", advertising_regulations: "Consumer Protection Act is stringent.", disclaimers: "Terms and Conditions must be easily accessible." },
+                culture: { colors: "Blue and white (national colors).", gestures: "Reserved." }
+            },
+            "France": {
+                tone: { primary: "Polite, structured, and can be formal.", formality: "`vous` (formal/plural) is standard. `tu` is informal." },
+                punctuation: { quotes: "Primary: `« ... »`.", apostrophe: "For elision.", colon_semicolon: "Space required before `;` and `:`. Used to introduce quotes.", exclamation_question: "Space required before `!` and `?`.", brackets: "Standard `()`.", greetings_closings: "Greeting usually followed by a comma." },
+                formatting: { short_date_format: "DD/MM/YYYY", long_date_format: "D MMMM Quy", timeFormat: "24-hour with `h` separator (e.g., 15 h 30)", decimal: ",", thousands: " (space)", currencySymbol: "€", currencyPlacement: "suffix", percentage: "Non-breaking space before %." },
+                grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Two grammatical genders: masculine and feminine.", hyphenation: "Hyphens are used for specific compound nouns and verb-pronoun inversions.", sentence_structure: "Generally SVO. Adverbs typically follow the conjugated verb." },
+                measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },
+                contact: { address: "Recipient Name<br>Building/Apt<br>Street Number Street Name<br>Postal Code CITY", phone: "+33 X XX XX XX XX" },
+                legal: { data_privacy: "GDPR enforced by CNIL.", advertising_regulations: "Loi Evin heavily restricts alcohol and tobacco advertising.", disclaimers: "Terms & Conditions (CGU/CGV) must be in French." },
+                culture: { colors: "Blue, white, red (national flag).", gestures: "La bise is a common greeting." }
+            },
+            "Germany": {
+                tone: { primary: "Formal, direct, and precise.", formality: "Strict distinction. `Sie` (formal) is standard. `du` is informal." },
+                punctuation: { quotes: "Primary: `„...“`.", apostrophe: "For genitives of names ending in s, ß, x, z.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?`, `!` used sparingly.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by comma, next line starts lowercase." },
+                formatting: { short_date_format: "DD.MM.YYYY", long_date_format: "D. MMMM Quy", timeFormat: "24-hour (e.g., 15:30)", decimal: ",", thousands: ".", currencySymbol: "€", currencyPlacement: "suffix", percentage: "Space before %." },
+                grammar: { capitalization: "All nouns are capitalized.", gender: "Three grammatical genders: masculine, feminine, and neuter.", hyphenation: "Compound words are famously written closed.", sentence_structure: "V2 word order in main clauses, verb at the end in subordinate clauses." },
+                measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },
+                contact: { address: "Recipient Name<br>Street Name House Number<br>Postal Code City", phone: "+49 (XXX) XXXXXXX" },
+                legal: { data_privacy: "GDPR implemented via BDSG.", advertising_regulations: "Unfair Competition Act (UWG) is very strict.", disclaimers: "An `Impressum` is mandatory for almost all websites." },
+                culture: { colors: "Follows Western conventions.", gestures: "Punctuality is key." }
+            },
+            "Italy": {
+                tone: { primary: "Expressive and warm.", formality: "Formal `Lei` is standard in business." },
+                punctuation: { quotes: "Primary: `«...»`.", apostrophe: "For elision.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by a comma." },
+                formatting: { short_date_format: "DD/MM/YYYY", long_date_format: "D MMMM Quy", timeFormat: "24-hour (e.g., 15:30)", decimal: ",", thousands: ".", currencySymbol: "€", currencyPlacement: "suffix", percentage: "No space before % is common practice." },
+                grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Two grammatical genders: masculine and feminine.", hyphenation: "Hyphenation is less common. Used for some compound adjectives or for clarity.", sentence_structure: "Primarily SVO, but flexible for emphasis. Adjectives generally follow nouns." },
+                measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },
+                contact: { address: "Street Name, Number<br>Postal Code City (Province Abbreviation)", phone: "+39 XXX XXXXXXX" },
+                legal: { data_privacy: "Subject to GDPR.", advertising_regulations: "Clear and transparent pricing is mandatory.", disclaimers: "VAT number (`Partita IVA`) must be displayed on business websites." },
+                culture: { colors: "Green, white, and red (national flag).", gestures: "Hand gestures are essential." }
+            },
+            "Netherlands": {
+                tone: { primary: "Direct and efficient.", formality: "`u` is formal, `je` is common." },
+                punctuation: { quotes: "Primary: `“...”`.", apostrophe: "For possessives and plurals of abbreviations.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by a comma." },
+                formatting: { short_date_format: "D-M-YYYY", long_date_format: "D MMMM Quy", timeFormat: "24-hour (e.g., 14:30)", decimal: ",", thousands: ".", currencySymbol: "€", currencyPlacement: "prefix", percentage: "Space before %." },
+                grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Two grammatical genders: common (`de`-words) and neuter (`het`-words).", hyphenation: "Compounds are generally closed.", sentence_structure: "V2 word order in main clauses, verb at the end in subordinate clauses." },
+                measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },
+                contact: { address: "Street Name House Number<br>Postal Code  CITY", phone: "+31 6 XXXXXXXX" },
+                legal: { data_privacy: "GDPR implemented as `AVG`.", advertising_regulations: "Strict rules against misleading or aggressive advertising.", disclaimers: "Chamber of Commerce (`KvK`) number must be displayed." },
+                culture: { colors: "Orange is the national color.", gestures: "Direct eye contact is expected." }
+            },
+            "Norway": {
+                tone: { primary: "Direct and egalitarian.", formality: "`du` is standard." },
+                punctuation: { quotes: "Primary: `«...»`.", apostrophe: "For genitives of words ending in -s, -x, -z.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by a comma." },
+                formatting: { short_date_format: "DD.MM.YYYY", long_date_format: "D. MMMM Quy", timeFormat: "24-hour with period separator (e.g., 14.30)", decimal: ",", thousands: " (space) or .", currencySymbol: "kr", currencyPlacement: "prefix", percentage: "Space before %." },
+                grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Three genders (masculine, feminine, neuter).", hyphenation: "Compound words are written as one word.", sentence_structure: "V2 word order (verb is the second element)." },
+                measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },
+                contact: { address: "Name<br>Street Address House Number<br>Postal Code CITY", phone: "+47 XXX XX XXX" },
+                legal: { data_privacy: "GDPR is part of Norwegian law.", advertising_regulations: "Marketing Control Act requires transparency.", disclaimers: "Clear information on consumer rights." },
+                culture: { colors: "Nature-based colors are popular.", gestures: "General European norms." }
+            },
+            "Poland": {
+                tone: { primary: "Respectful and formal.", formality: "Titles `Pan`/`Pani` are standard." },
+                punctuation: { quotes: "Primary: `„...”`.", apostrophe: "Rarely used.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by comma or exclamation mark." },
+                formatting: { short_date_format: "DD.MM.YYYY", long_date_format: "D MMMM Quy", timeFormat: "24-hour (e.g., 15:30)", decimal: ",", thousands: " (space)", currencySymbol: "zł", currencyPlacement: "suffix", percentage: "No space before % is common practice." },
+                grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Three main genders with additional complexities.", hyphenation: "Hyphens often used with compound adjectives.", sentence_structure: "Highly flexible word order, used for emphasis." },
+                measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },
+                contact: { address: "Street Name Number, Apt. Number<br>Postal Code CITY", phone: "+48 XXX XXX XXX" },
+                legal: { data_privacy: "GDPR is known as `RODO`.", advertising_regulations: "Act on Combating Unfair Competition applies.", disclaimers: "Specific information requirements for e-commerce." },
+                culture: { colors: "White and red (national colors).", gestures: "Firm handshake is standard." }
+            },
+            "Portugal": {
+                tone: { primary: "Polite and somewhat formal.", formality: "`o senhor`/`a senhora` is formal." },
+                punctuation: { quotes: "Primary: `«...»`.", apostrophe: "Rarely used.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by a comma or colon." },
+                formatting: { short_date_format: "DD/MM/YYYY", long_date_format: "D 'de' MMMM 'de' Quy", timeFormat: "24-hour (e.g., 15:30)", decimal: ",", thousands: ".", currencySymbol: "€", currencyPlacement: "suffix", percentage: "No space before % is common practice." },
+                grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Two grammatical genders: masculine and feminine.", hyphenation: "Used in some compound nouns and to attach clitic pronouns to verbs.", sentence_structure: "Generally SVO. Adjectives usually follow nouns." },
+                measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },
+                contact: { address: "Street Type Street Name, Number Floor-Direction<br>Postal Code-XXX CITY", phone: "+351 XXX XXX XXX" },
+                legal: { data_privacy: "Subject to GDPR.", advertising_regulations: "Advertising Code requires truthfulness.", disclaimers: "Complaints book (`Livro de Reclamações`) is mandatory." },
+                culture: { colors: "Green and red (national colors).", gestures: "Generally more reserved than Spanish." }
+            },
+            "Spain": {
+                tone: { primary: "Professional and polite.", formality: "Formal `usted` is standard for business." },
+                punctuation: { quotes: "Primary: `«...»`.", apostrophe: "Rarely used.", colon_semicolon: "Standard usage.", exclamation_question: "Mandatory inverted marks: `¿...?` and `¡...!`", brackets: "Standard `()`.", greetings_closings: "Greeting often followed by a colon." },
+                formatting: { short_date_format: "DD/MM/YYYY", long_date_format: "D 'de' MMMM 'de' Quy", timeFormat: "24-hour (e.g., 15:30)", decimal: ",", thousands: ".", currencySymbol: "€", currencyPlacement: "suffix", percentage: "No space before % is common practice." },
+                grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Two grammatical genders: masculine and feminine.", hyphenation: "Not as common as in English.", sentence_structure: "SVO is standard but flexible for emphasis." },
+                measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },
+                contact: { address: "Street Name, Number, Floor/Door<br>Postal Code City<br>Province", phone: "+34 XXX XXX XXX" },
+                legal: { data_privacy: "GDPR implemented via `LOPDGDD`.", advertising_regulations: "General Advertising Law prohibits misleading advertising.", disclaimers: "Company registration data and tax ID (`NIF`) often required." },
+                culture: { colors: "Red and yellow (national flag).", gestures: "The 'OK' sign can be vulgar." }
+            },
+            "Sweden": {
+                tone: { primary: "Consensus-oriented and informal.", formality: "`du` is standard." },
+                punctuation: { quotes: "Primary: `”...”`.", apostrophe: "Not for genitives (use -s suffix); used for some abbreviations.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting usually followed by an exclamation mark." },
+                formatting: { short_date_format: "YYYY-MM-DD", long_date_format: "D MMMM Quy", timeFormat: "24-hour with period separator (e.g., 14.30)", decimal: ",", thousands: " (space)", currencySymbol: "kr", currencyPlacement: "suffix", percentage: "Space before %." },
+                grammar: { capitalization: "Sentence case. Days, months, nationalities are lowercase.", gender: "Two grammatical genders: common (`en`) and neuter (`ett`).", hyphenation: "Compound words are written as one word.", sentence_structure: "V2 word order (verb is the second element)." },
+                measures: { distance: "Kilometers (km)", weight: "Kilograms (kg)", volume: "Liters (L)", temperature: "Celsius (°C)", area: "Square meters (m²)", speed: "km/h" },
+                contact: { address: "Name<br>Street Address House Number<br>SE-Postal Code CITY<br>SWEDEN", phone: "+46 (0)X XXX XX XX" },
+                legal: { data_privacy: "Subject to GDPR.", advertising_regulations: "The Marketing Act requires advertising to be truthful.", disclaimers: "Clear disclosure of sponsored content is required." },
+                culture: { colors: "Blue and yellow (national colors).", gestures: "Reserved. Values `lagom` (moderation)." }
+            }
+        };
+        localizationData.generalGuidelines = fullGeneralData;
+
+
+        let currentState = {
+            selectedClient: 'generalGuidelines',
+            selectedLanguage: 'Germany',
+            selectedTab: 'tone',
+            selectedComparison: 'short_date_format',
+            selectedCountries: Object.keys(localizationData.generalGuidelines).sort()
+        };
+
+        const clientSelect = document.getElementById('client-select');
+        const languageSelect = document.getElementById('language-select');
+        const tabsContainer = document.getElementById('tabs-container').querySelector('nav');
+        const tabContent = document.getElementById('tab-content');
+        const comparisonSelect = document.getElementById('comparison-select');
+        const comparisonTableContainer = document.getElementById('comparison-table-container');
+        const countryFilterButton = document.getElementById('country-filter-button');
+        const countryFilterDropdown = document.getElementById('country-filter-dropdown');
+        const explorerTitle = document.getElementById('explorer-title');
+
+
+        const tabIcons = {
+            tone: '“',
+            punctuation: '§',
+            formatting: '123',
+            grammar: '¶',
+            measures: '📏',
+            contact: '＠',
+            legal: '⚖️',
+            culture: '🌍',
+            terminology: '📖',
+            personas: '👥',
+            visualGuidelines: '🖼️',
+            commonPitfalls: '⚠️',
+            contentTypes: '📄'
+        };
+
+        function populateClientSelect() {
+            let optionsHTML = `<option value="generalGuidelines">General Guidelines</option>`;
+            for(const [key, value] of Object.entries(localizationData.clientProfiles)) {
+                optionsHTML += `<option value="${key}">${value.name}</option>`;
+            }
+            clientSelect.innerHTML = optionsHTML;
+        }
+
+        function populateLanguageSelect() {
+            const languages = Object.keys(localizationData.generalGuidelines).sort();
+            languageSelect.innerHTML = languages.map(lang => `<option value="${lang}" ${lang === currentState.selectedLanguage ? 'selected' : ''}>${lang}</option>`).join('');
+        }
+        
+        function populateComparisonSelect() {
+            const comparisonPoints = { 
+                'short_date_format': 'Short Date Format', 'long_date_format': 'Long Date Format', 'timeFormat': 'Time Format', 'decimal': 'Decimal Separator', 'thousands': 'Thousands Separator', 'currencySymbol': 'Currency Symbol', 'currencyPlacement': 'Currency Placement', 'percentage': 'Percentage Symbol', 'quotes': 'Quotation Marks', 'formality': 'Formality (Pronoun)', 'capitalization': 'Capitalization (Headlines)', 'gender': 'Grammatical Gender', 'hyphenation': 'Hyphenation & Compounds', 'sentence_structure': 'Sentence Structure', 'data_privacy': 'Data Privacy', 'advertising_regulations': 'Advertising Regulations', 'distance': 'Distance Units', 'weight': 'Weight Units', 'volume': 'Volume Units', 'temperature': 'Temperature Units', 'area': 'Area Units', 'speed': 'Speed Units'
+            };
+            comparisonSelect.innerHTML = Object.entries(comparisonPoints).map(([key, value]) => `<option value="${key}" ${key === currentState.selectedComparison ? 'selected' : ''}>${value}</option>`).join('');
+        }
+
+        function populateCountryFilter() {
+            const allLanguages = Object.keys(localizationData.generalGuidelines).sort();
+            let filterHTML = `<div class="p-2 flex justify-between border-b border-gray-200"><button id="filter-select-all" class="text-sm text-indigo-600 hover:text-indigo-800">Select All</button><button id="filter-deselect-all" class="text-sm text-indigo-600 hover:text-indigo-800">Deselect All</button></div><div class="space-y-1 p-1">`;
+            filterHTML += allLanguages.map(lang => `<div class="flex items-center p-1 rounded-md hover:bg-slate-100"><input id="filter-${lang}" name="country-filter" type="checkbox" value="${lang}" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" checked><label for="filter-${lang}" class="ml-2 block text-sm text-gray-900 w-full cursor-pointer">${lang}</label></div>`).join('');
+            filterHTML += `</div>`;
+            countryFilterDropdown.innerHTML = filterHTML;
+
+            document.querySelectorAll('input[name="country-filter"]').forEach(checkbox => checkbox.addEventListener('change', handleCountryFilterChange));
+            document.getElementById('filter-select-all').addEventListener('click', () => { document.querySelectorAll('input[name="country-filter"]').forEach(checkbox => checkbox.checked = true); handleCountryFilterChange(); });
+            document.getElementById('filter-deselect-all').addEventListener('click', () => { document.querySelectorAll('input[name="country-filter"]').forEach(checkbox => checkbox.checked = false); handleCountryFilterChange(); });
+        }
+        
+        function handleCountryFilterChange() {
+            const selected = Array.from(document.querySelectorAll('input[name="country-filter"]:checked')).map(cb => cb.value);
+            currentState.selectedCountries = selected;
+            renderComparisonTable();
+            updateFilterButtonText();
+        }
+
+        function updateFilterButtonText() {
+            const count = currentState.selectedCountries.length;
+            const total = Object.keys(localizationData.generalGuidelines).length;
+            const buttonText = document.getElementById('country-filter-button-text');
+            if (count === 0) buttonText.textContent = 'Select Countries';
+            else if (count === total) buttonText.textContent = 'All Countries';
+            else buttonText.textContent = `${count} Countries Selected`;
+        }
+        
+        function getSectionData(section) {
+            const lang = currentState.selectedLanguage;
+            const client = currentState.selectedClient;
+
+            const generalData = localizationData.generalGuidelines[lang]?.[section] || {};
+            let clientData = {};
+            
+            if(client !== 'generalGuidelines') {
+                 clientData = localizationData.clientProfiles[client]?.languages[lang]?.[section] || {};
+            }
+            
+            return {...generalData, ...clientData};
+        }
+
+
+        function renderTabs() {
+            const generalTabs = ['tone', 'punctuation', 'formatting', 'grammar', 'measures', 'contact', 'legal', 'culture'];
+            const clientTabs = ['terminology', 'personas', 'visualGuidelines', 'commonPitfalls', 'contentTypes'];
+            
+            let tabsToRender = generalTabs;
+            if (currentState.selectedClient !== 'generalGuidelines') {
+                tabsToRender = [...generalTabs, ...clientTabs];
+            }
+
+            tabsContainer.innerHTML = tabsToRender.map(key => {
+                return `
+                <button onclick="handleTabClick('${key}')" class="tab-button ${currentState.selectedTab === key ? 'active' : ''} flex items-center gap-2 whitespace-nowrap border-b-2 py-3 px-4 text-sm font-medium border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700">
+                     <span class="text-indigo-600 font-bold">${tabIcons[key]}</span> ${key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
+                </button>
+            `}).join('');
+        }
+        
+        function renderTabContent() {
+            let tabData;
+            
+            const generalTabs = ['tone', 'punctuation', 'formatting', 'grammar', 'measures', 'contact', 'legal', 'culture'];
+
+            if (generalTabs.includes(currentState.selectedTab)) {
+                 tabData = getSectionData(currentState.selectedTab);
+            } else if (currentState.selectedClient !== 'generalGuidelines') {
+                 tabData = localizationData.clientProfiles[currentState.selectedClient][currentState.selectedTab];
+            }
+
+
+            if (!tabData) {
+                tabContent.innerHTML = '<p>No data available for this section.</p>';
+                return;
+            }
+
+            let contentHTML = '<div class="space-y-4">';
+
+            if(tabData.title && tabData.description) { // For Persona-like sections
+                 contentHTML += `
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <h4 class="font-semibold text-slate-800 capitalize">${tabData.title}</h4>
+                        <p class="text-slate-600 mt-1 whitespace-pre-line">${tabData.description}</p>
+                    </div>`;
+            } else if(tabData.title && tabData.guidelines) { // for Visuals
+                 contentHTML += `
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <h4 class="font-semibold text-slate-800 capitalize">${tabData.title}</h4>
+                        <p class="text-slate-600 mt-1 whitespace-pre-line">${tabData.guidelines}</p>
+                    </div>`;
+            } else if(tabData.title && tabData.pitfalls) { // for Pitfalls
+                 contentHTML += `
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <h4 class="font-semibold text-slate-800 capitalize">${tabData.title}</h4>
+                        <p class="text-slate-600 mt-1 whitespace-pre-line">${tabData.pitfalls}</p>
+                    </div>`;
+            } else if(tabData.title && tabData.terms) { // for Terminology
+                 contentHTML += `
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <h4 class="font-semibold text-slate-800 capitalize">${tabData.title}</h4>
+                        <p class="text-slate-600 mt-1 whitespace-pre-line">${tabData.terms}</p>
+                    </div>`;
+            } else if(tabData.title && tabData.types) { // For Content Types
+                contentHTML += `
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <h4 class="font-semibold text-slate-800 capitalize">${tabData.title}</h4>
+                        <div class="text-slate-600 mt-1 whitespace-pre-line">${tabData.types.replace(/\*\*/g, '<strong class="font-semibold text-slate-700">')}</div>
+                    </div>`;
+
+            } else {
+                 for (const [key, value] of Object.entries(tabData)) {
+                    contentHTML += `
+                        <div class="p-4 bg-slate-50 rounded-lg">
+                            <h4 class="font-semibold text-slate-800 capitalize">${key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1')}</h4>
+                            <p class="text-slate-600 mt-1">${value}</p>
+                        </div>
+                    `;
+                }
+            }
+
+
+            if (currentState.selectedTab === 'culture') {
+                contentHTML += `<div id="culture-insights-container" class="mt-4"><button id="culture-btn" onclick="getCulturalInsights()" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">✨ Generate Cultural Insights</button><div id="culture-output" class="p-4 bg-indigo-50 text-indigo-800 rounded-lg hidden mt-4"></div></div>`;
+            }
+            contentHTML += '</div>';
+            
+            tabContent.innerHTML = contentHTML;
+            tabContent.classList.remove('fade-in');
+            void tabContent.offsetWidth; 
+            tabContent.classList.add('fade-in');
+        }
+
+        function renderComparisonTable() {
+            const topicKey = currentState.selectedComparison;
+            let tableHTML = `<div class="relative overflow-x-auto shadow-md sm:rounded-lg"><table class="w-full text-sm text-left text-slate-500"><thead class="text-xs text-slate-700 uppercase bg-slate-100"><tr><th scope="col" class="px-6 py-3">Language</th><th scope="col" class="px-6 py-3">Guideline</th></tr></thead><tbody>`;
+            const languagesToRender = currentState.selectedCountries.sort();
+
+            if(languagesToRender.length === 0){
+                tableHTML += `<tr><td colspan="2" class="text-center p-4">No countries selected.</td></tr>`;
+            } else {
+                 languagesToRender.forEach(lang => {
+                    let value = 'N/A';
+                     for (const category of ['tone', 'punctuation', 'formatting', 'grammar', 'measures', 'legal']) {
+                        if (localizationData.generalGuidelines[lang]?.[category]?.[topicKey]) {
+                            value = localizationData.generalGuidelines[lang][category][topicKey];
+                            break;
+                        }
+                    }
+                    if (topicKey === 'thousands' && value === ' ') { value = '[space]'; }
+                    tableHTML += `<tr class="bg-white border-b hover:bg-slate-50"><th scope="row" class="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">${lang}</th><td class="px-6 py-4">${value}</td></tr>`;
+                });
+            }
+           
+            tableHTML += `</tbody></table></div>`;
+            comparisonTableContainer.innerHTML = tableHTML;
+        }
+
+        function handleTabClick(tab) {
+            currentState.selectedTab = tab;
+            renderTabs();
+            renderTabContent();
+        }
+        
+        function updateUI() {
+            const clientName = currentState.selectedClient === 'generalGuidelines' ? 'General Guidelines' : localizationData.clientProfiles[currentState.selectedClient].name;
+            explorerTitle.textContent = `${clientName}: Guideline Explorer`;
+            renderTabs();
+            renderTabContent();
+        }
+
+        clientSelect.addEventListener('change', (e) => {
+            currentState.selectedClient = e.target.value;
+            currentState.selectedTab = 'tone';
+            updateUI();
+        });
+
+        languageSelect.addEventListener('change', (e) => {
+            currentState.selectedLanguage = e.target.value;
+            const generalTabs = ['tone', 'punctuation', 'formatting', 'grammar', 'measures', 'contact', 'legal', 'culture'];
+            const clientTabs = ['terminology', 'personas', 'visualGuidelines', 'commonPitfalls', 'contentTypes'];
+            const availableTabs = currentState.selectedClient === 'generalGuidelines' ? generalTabs : [...generalTabs, ...clientTabs];
+            if (!availableTabs.includes(currentState.selectedTab)) {
+               currentState.selectedTab = 'tone';
+            }
+            updateUI();
+        });
+
+        comparisonSelect.addEventListener('change', (e) => { currentState.selectedComparison = e.target.value; renderComparisonTable(); });
+        countryFilterButton.addEventListener('click', (event) => { event.stopPropagation(); countryFilterDropdown.classList.toggle('hidden'); });
+        window.addEventListener('click', (e) => { if (!countryFilterButton.contains(e.target) && !countryFilterDropdown.contains(e.target)) { countryFilterDropdown.classList.add('hidden'); } });
+
+        async function callGemini(prompt, button, outputElement) {
+            const originalButtonText = button.innerHTML;
+            button.disabled = true; button.innerHTML = '<div class="spinner"></div> Generating...';
+            outputElement.classList.remove('hidden'); outputElement.innerHTML = '<div class="flex justify-center items-center"><div class="spinner"></div><span class="ml-2">Fetching AI insights...</span></div>';
+            const apiKey = ""; const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
+                    let text = result.candidates[0].content.parts[0].text.replace(/\n\*/g, '</li><li>').replace(/\* /g, '<li>').replace(/<\/li><li>/g, '</li><li>').replace(/^<li>/, '<ul><li>') + '</li></ul>';
+                    outputElement.innerHTML = text;
+                } else { outputElement.textContent = "Sorry, couldn't get a response. Please try again later."; }
+            } catch (error) { console.error("Gemini API call failed:", error); outputElement.textContent = "An error occurred. Please check the console for details.";
+            } finally { button.disabled = false; button.innerHTML = originalButtonText; }
+        }
+
+        async function getToneAdvice() {
+            const toneInput = document.getElementById('tone-input'); const userText = toneInput.value.trim();
+            if (!userText) { const toneOutput = document.getElementById('tone-output'); toneOutput.classList.remove('hidden'); toneOutput.textContent = "Please enter some text to analyze."; return; }
+            const toneData = getSectionData('tone');
+            const toneDescription = toneData.primary + " " + toneData.formality;
+            const prompt = `As an expert in localization for ${currentState.selectedLanguage}, review the following text: "${userText}". The target tone is: "${toneDescription}". Provide clear, actionable suggestions in bullet points on how to better align the text with this tone. If the text is already well-aligned, confirm that and explain why.`;
+            await callGemini(prompt, document.getElementById('tone-submit'), document.getElementById('tone-output'));
+        }
+
+        async function getCulturalInsights() {
+            const prompt = `You are a localization expert. Provide 3 key cultural insights for a content writer creating marketing material for ${currentState.selectedLanguage}. Focus on humor, sensitive topics, common values, and important holidays or events. Present these in bullet points.`;
+            await callGemini(prompt, document.getElementById('culture-btn'), document.getElementById('culture-output'));
+        }
+        
+        function init() {
+            populateClientSelect();
+            populateLanguageSelect();
+            populateComparisonSelect();
+            populateCountryFilter();
+            updateFilterButtonText();
+            updateUI();
+            renderComparisonTable();
+        }
+
+        window.onload = init;
+    </script>
 </body>
 </html>
