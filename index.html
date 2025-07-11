@@ -120,54 +120,71 @@
     </div>
 
     <script>
+        // DATA STRUCTURE
+        // =================================================================================
+        // This is the main data object for the entire application.
+        // It's structured to hold both general guidelines and client-specific overrides.
         const localizationData = {
+            // `generalGuidelines` holds the baseline rules for every language.
+            // This is the fallback data if a client doesn't have a specific rule.
             generalGuidelines: {},
+            // `clientProfiles` holds data unique to each client.
             clientProfiles: {
                 "visa": {
                     name: "Visa",
+                    // The client's main tone of voice.
+                    tone: { 
+                        primary: "Smartly enthusiastic with a hint of wit. Clear, straightforward, engaged, original, confident, and focused.",
+                        details: "• Speak in an accessible, energetic manner.\n• Use plain, simple language and speak in the active voice.\n• Be friendly and conversational.\n• Talk about familiar things in a surprising way.\n• Speak in direct, upbeat statements."
+                    },
+                    // `languages` holds overrides for specific languages.
                     languages: {
                         "Germany": {
-                            tone: { primary: "Secure, trustworthy, and professional.", formality: "`Sie` is mandatory across all content." },
+                            tone: { formality: "`Sie` is mandatory across all content." },
                             legal: { disclaimers: "All promotional offers must include full terms and conditions link. Interest rates must be displayed as 'eff. Jahreszins'." }
                         }
                     },
+                    // Client-specific sections that appear as new tabs.
                     terminology: { "Visa Direct and Verified by Visa" : "are trademarks and must not be translated" , "Contactless payment": " translates to `kontaktloses Bezahlen`." },
                     personas: { title: "Target Audience", description: "Persona: 'The Secure Spender' (Age 30-60). Values security, reliability, and global acceptance. Content should emphasize fraud protection and convenience." },
                     visualGuidelines: { title: "Visual Guidelines", guidelines: "Use official Visa blue and gold. Photography should show modern, secure payment situations. Avoid showing cash." },
                     commonPitfalls: { title: "Common Pitfalls", pitfalls: "Do not make promises about credit approval. Avoid informal language that could undermine trust." },
-                    contentTypes: { title: "E-commerce Content Guidelines", types: "**B2B Pages:** Formal, professional tone. **Cardholder Benefits:** Clear, benefit-oriented language, focusing on security and rewards." }
+                    contentTypes: { title: "E-commerce Content Guidelines", types: "**B2B Pages:** Formal, professional tone.\n**Cardholder Benefits:** Clear, benefit-oriented language, focusing on security and rewards." }
                 },
                 "samsung": {
                     name: "Samsung",
+                    tone: { primary: "Innovative, modern, and user-focused.", formality: "Default to formal, but adapt to market norms." },
                     languages: {
                         "Germany": {
-                            tone: { primary: "Innovative, modern, and user-focused.", formality: "`Sie` for general marketing and product pages. `du` is approved for social media campaigns targeting younger audiences." }
+                            tone: { formality: "`Sie` for general marketing and product pages. `du` is approved for social media campaigns targeting younger audiences." }
                         }
                     },
                     terminology: { title: "Product Terminology", terms: "Product families like `Galaxy`, `Neo QLED`, and `Bespoke` are trademarks and never translated. Features like `SmartThings` are also trademarks." },
                     personas: { title: "Target Audience", description: "Persona: 'The Tech Enthusiast' (Age 25-45). Values cutting-edge features, specifications, and ecosystem integration. Content should be rich with technical details." },
                     visualGuidelines: { title: "Visual Guidelines", guidelines: "Use dynamic, high-quality product shots and lifestyle images showing seamless connectivity. Follow official brand color palettes." },
                     commonPitfalls: { title: "Common Pitfalls", pitfalls: "Ensure metric units are used for all specifications (e.g., cm for screen sizes, not inches)." },
-                    contentTypes: { title: "E-commerce Content Guidelines", types: "**Product Detail Pages:** Use bullet points for key specs. **Promotional Banners:** Emphasize the core innovation or benefit clearly and concisely." }
+                    contentTypes: { title: "E-commerce Content Guidelines", types: "**Product Detail Pages:** Use bullet points for key specs.\n**Promotional Banners:** Emphasize the core innovation or benefit clearly and concisely." }
                 },
                 "dyson": {
                     name: "Dyson",
+                    tone: { primary: "Engineering-focused, premium, and scientific.", formality: "Always formal." },
                     languages: {
                         "Germany": {
-                            tone: { primary: "Engineering-focused, premium, and scientific.", formality: "`Sie` is mandatory. The tone should reflect expertise and precision." }
+                            tone: { formality: "`Sie` is mandatory. The tone should reflect expertise and precision." }
                         }
                     },
                     terminology: { title: "Technology Terminology", terms: "Core technologies like `Cyclone`, `Airwrap`, and `Supersonic` are trademarks. Use official German terms for features like `Laser-Stauberkennung`." },
                     personas: { title: "Target Audience", description: "Persona: 'The Design-Conscious Homeowner' (Age 35-60). Values performance, longevity, and industrial design. Content should highlight the science and problem-solving aspect." },
                     visualGuidelines: { title: "Visual Guidelines", guidelines: "Focus on clean, almost clinical imagery. Use cutaways and diagrams to explain the technology. Videos should be demonstrative." },
                     commonPitfalls: { title: "Common Pitfalls", pitfalls: "Avoid claims that sound like marketing fluff. Every statement should feel backed by engineering evidence." },
-                    contentTypes: { title: "E-commerce Content Guidelines", types: "**Product Pages:** Lead with the core problem the technology solves. **Support Articles:** Provide clear, step-by-step instructions." }
+                    contentTypes: { title: "E-commerce Content Guidelines", types: "**Product Pages:** Lead with the core problem the technology solves.\n**Support Articles:** Provide clear, step-by-step instructions." }
                 },
                 "rusta": {
                     name: "Rusta",
+                    tone: { primary: "Friendly, accessible, and value-driven.", formality: "Informal is the default." },
                     languages: {
                         "Germany": {
-                            tone: { primary: "Friendly, accessible, and value-driven.", formality: "Use `du` to maintain the informal and approachable brand voice from its Swedish origin." }
+                            tone: { formality: "Use `du` to maintain the informal and approachable brand voice from its Swedish origin." }
                         },
                         "Sweden": {
                             tone: { formality: "`du` is always used." }
@@ -177,12 +194,14 @@
                     personas: { title: "Target Audience", description: "Persona: 'The Practical Family' (Age 25-55). Values affordability, practicality, and finding good deals. Content should be straightforward and price-conscious." },
                     visualGuidelines: { title: "Visual Guidelines", guidelines: "Show products in real, everyday home settings. Emphasize price and value in promotional graphics. Use bright, welcoming colors." },
                     commonPitfalls: { title: "Common Pitfalls", pitfalls: "Do not try to sound too premium or exclusive; this goes against the brand's core values." },
-                    contentTypes: { title: "E-commerce Content Guidelines", types: "**Weekly Flyers:** Highlight deals and seasonal products. **Product Descriptions:** Be clear, concise, and mention the price and value proposition." }
+                    contentTypes: { title: "E-commerce Content Guidelines", types: "**Weekly Flyers:** Highlight deals and seasonal products.\n**Product Descriptions:** Be clear, concise, and mention the price and value proposition." }
                 }
             }
         };
 
-      const fullGeneralData = {
+        // This object holds the complete, detailed set of general guidelines for all languages.
+        // It's kept separate for clarity and is merged into `localizationData.generalGuidelines` on startup.
+        const fullGeneralData = {
             "Denmark": {
                 tone: { primary: "Direct and informal.", formality: "`du` (informal 'you') is the standard. The formal `De` is very rare." },
                 punctuation: { quotes: "Primary: `»...«` or `„...“`.", apostrophe: "For genitive of words ending in -s, -x, -z.", colon_semicolon: "Standard usage.", exclamation_question: "Standard `?` and `!`.", brackets: "Standard `()`.", greetings_closings: "Greeting followed by a comma." },
@@ -297,14 +316,20 @@
         localizationData.generalGuidelines = fullGeneralData;
 
 
+        // STATE MANAGEMENT
+        // =================================================================================
+        // This object tracks the current state of the UI (what the user has selected).
         let currentState = {
-            selectedClient: 'generalGuidelines',
-            selectedLanguage: 'Germany',
-            selectedTab: 'tone',
-            selectedComparison: 'short_date_format',
-            selectedCountries: Object.keys(localizationData.generalGuidelines).sort()
+            selectedClient: 'generalGuidelines', // 'generalGuidelines' or a client key like 'visa'
+            selectedLanguage: 'Germany',          // The currently selected language
+            selectedTab: 'tone',                // The currently active tab in the explorer
+            selectedComparison: 'short_date_format', // The currently selected rule for comparison
+            selectedCountries: Object.keys(localizationData.generalGuidelines).sort() // Countries for comparison table
         };
 
+        // DOM ELEMENT REFERENCES
+        // =================================================================================
+        // Caching DOM elements for performance and easier access.
         const clientSelect = document.getElementById('client-select');
         const languageSelect = document.getElementById('language-select');
         const tabsContainer = document.getElementById('tabs-container').querySelector('nav');
@@ -316,6 +341,9 @@
         const explorerTitle = document.getElementById('explorer-title');
 
 
+        // ICONS MAPPING
+        // =================================================================================
+        // Maps section keys to display icons for a better visual experience.
         const tabIcons = {
             tone: '“',
             punctuation: '§',
@@ -332,6 +360,12 @@
             contentTypes: '📄'
         };
 
+        // INITIALIZATION & POPULATION FUNCTIONS
+        // =================================================================================
+
+        /**
+         * Populates the client selection dropdown.
+         */
         function populateClientSelect() {
             let optionsHTML = `<option value="generalGuidelines">General Guidelines</option>`;
             for(const [key, value] of Object.entries(localizationData.clientProfiles)) {
@@ -340,11 +374,17 @@
             clientSelect.innerHTML = optionsHTML;
         }
 
+        /**
+         * Populates the language selection dropdown based on available general guidelines.
+         */
         function populateLanguageSelect() {
             const languages = Object.keys(localizationData.generalGuidelines).sort();
             languageSelect.innerHTML = languages.map(lang => `<option value="${lang}" ${lang === currentState.selectedLanguage ? 'selected' : ''}>${lang}</option>`).join('');
         }
         
+        /**
+         * Populates the dropdown for the cross-market comparison tool.
+         */
         function populateComparisonSelect() {
             const comparisonPoints = { 
                 'short_date_format': 'Short Date Format', 'long_date_format': 'Long Date Format', 'timeFormat': 'Time Format', 'decimal': 'Decimal Separator', 'thousands': 'Thousands Separator', 'currencySymbol': 'Currency Symbol', 'currencyPlacement': 'Currency Placement', 'percentage': 'Percentage Symbol', 'quotes': 'Quotation Marks', 'formality': 'Formality (Pronoun)', 'capitalization': 'Capitalization (Headlines)', 'gender': 'Grammatical Gender', 'hyphenation': 'Hyphenation & Compounds', 'sentence_structure': 'Sentence Structure', 'data_privacy': 'Data Privacy', 'advertising_regulations': 'Advertising Regulations', 'distance': 'Distance Units', 'weight': 'Weight Units', 'volume': 'Volume Units', 'temperature': 'Temperature Units', 'area': 'Area Units', 'speed': 'Speed Units'
@@ -352,6 +392,9 @@
             comparisonSelect.innerHTML = Object.entries(comparisonPoints).map(([key, value]) => `<option value="${key}" ${key === currentState.selectedComparison ? 'selected' : ''}>${value}</option>`).join('');
         }
 
+        /**
+         * Populates the country filter dropdown with checkboxes for each language.
+         */
         function populateCountryFilter() {
             const allLanguages = Object.keys(localizationData.generalGuidelines).sort();
             let filterHTML = `<div class="p-2 flex justify-between border-b border-gray-200"><button id="filter-select-all" class="text-sm text-indigo-600 hover:text-indigo-800">Select All</button><button id="filter-deselect-all" class="text-sm text-indigo-600 hover:text-indigo-800">Deselect All</button></div><div class="space-y-1 p-1">`;
@@ -359,11 +402,18 @@
             filterHTML += `</div>`;
             countryFilterDropdown.innerHTML = filterHTML;
 
+            // Attach event listeners for the filter controls
             document.querySelectorAll('input[name="country-filter"]').forEach(checkbox => checkbox.addEventListener('change', handleCountryFilterChange));
             document.getElementById('filter-select-all').addEventListener('click', () => { document.querySelectorAll('input[name="country-filter"]').forEach(checkbox => checkbox.checked = true); handleCountryFilterChange(); });
             document.getElementById('filter-deselect-all').addEventListener('click', () => { document.querySelectorAll('input[name="country-filter"]').forEach(checkbox => checkbox.checked = false); handleCountryFilterChange(); });
         }
         
+        // UI RENDERING & LOGIC
+        // =================================================================================
+
+        /**
+         * Handles changes in the country filter, updates state, and re-renders the comparison table.
+         */
         function handleCountryFilterChange() {
             const selected = Array.from(document.querySelectorAll('input[name="country-filter"]:checked')).map(cb => cb.value);
             currentState.selectedCountries = selected;
@@ -371,6 +421,9 @@
             updateFilterButtonText();
         }
 
+        /**
+         * Updates the text on the filter button to show how many countries are selected.
+         */
         function updateFilterButtonText() {
             const count = currentState.selectedCountries.length;
             const total = Object.keys(localizationData.generalGuidelines).length;
@@ -380,21 +433,41 @@
             else buttonText.textContent = `${count} Countries Selected`;
         }
         
+        /**
+         * Core data retrieval function. It intelligently merges general guidelines with client-specific overrides.
+         * @param {string} section - The guideline category (e.g., 'tone', 'grammar').
+         * @returns {object} - The merged data object for the current section.
+         */
         function getSectionData(section) {
             const lang = currentState.selectedLanguage;
             const client = currentState.selectedClient;
 
+            // Special handling for 'tone' to merge client's general tone with language-specific overrides.
+            if (section === 'tone' && client !== 'generalGuidelines') {
+                const clientTone = localizationData.clientProfiles[client].tone || {};
+                const languageSpecificTone = localizationData.clientProfiles[client]?.languages[lang]?.tone || {};
+                const generalLanguageTone = localizationData.generalGuidelines[lang]?.tone || {};
+                // The order is important: general language rules are the base, client general rules override that,
+                // and client language-specific rules are the final override.
+                return { ...generalLanguageTone, ...clientTone, ...languageSpecificTone };
+            }
+
+            // For all other sections, get the general data.
             const generalData = localizationData.generalGuidelines[lang]?.[section] || {};
             let clientData = {};
             
+            // If a client is selected, get their specific overrides for the section.
             if(client !== 'generalGuidelines') {
                  clientData = localizationData.clientProfiles[client]?.languages[lang]?.[section] || {};
             }
             
+            // Return the merged object, with client data taking precedence.
             return {...generalData, ...clientData};
         }
 
-
+        /**
+         * Renders the navigation tabs based on the current context (general vs. client).
+         */
         function renderTabs() {
             const generalTabs = ['tone', 'punctuation', 'formatting', 'grammar', 'measures', 'contact', 'legal', 'culture'];
             const clientTabs = ['terminology', 'personas', 'visualGuidelines', 'commonPitfalls', 'contentTypes'];
@@ -412,11 +485,15 @@
             `}).join('');
         }
         
+        /**
+         * Renders the content for the currently selected tab.
+         */
         function renderTabContent() {
             let tabData;
             
             const generalTabs = ['tone', 'punctuation', 'formatting', 'grammar', 'measures', 'contact', 'legal', 'culture'];
 
+            // Determine which data to fetch based on the selected tab type.
             if (generalTabs.includes(currentState.selectedTab)) {
                  tabData = getSectionData(currentState.selectedTab);
             } else if (currentState.selectedClient !== 'generalGuidelines') {
@@ -431,60 +508,42 @@
 
             let contentHTML = '<div class="space-y-4">';
 
-            if(tabData.title && tabData.description) { // For Persona-like sections
+            // Client-specific sections have a different structure (title + long text).
+            if(tabData.title && (tabData.description || tabData.guidelines || tabData.pitfalls || tabData.terms || tabData.types)) { 
                  contentHTML += `
                     <div class="p-4 bg-slate-50 rounded-lg">
                         <h4 class="font-semibold text-slate-800 capitalize">${tabData.title}</h4>
-                        <p class="text-slate-600 mt-1 whitespace-pre-line">${tabData.description}</p>
+                        <div class="text-slate-600 mt-1 whitespace-pre-line">${(tabData.description || tabData.guidelines || tabData.pitfalls || tabData.terms || tabData.types).replace(/\*\*/g, '<strong class="font-semibold text-slate-700">')}</div>
                     </div>`;
-            } else if(tabData.title && tabData.guidelines) { // for Visuals
-                 contentHTML += `
-                    <div class="p-4 bg-slate-50 rounded-lg">
-                        <h4 class="font-semibold text-slate-800 capitalize">${tabData.title}</h4>
-                        <p class="text-slate-600 mt-1 whitespace-pre-line">${tabData.guidelines}</p>
-                    </div>`;
-            } else if(tabData.title && tabData.pitfalls) { // for Pitfalls
-                 contentHTML += `
-                    <div class="p-4 bg-slate-50 rounded-lg">
-                        <h4 class="font-semibold text-slate-800 capitalize">${tabData.title}</h4>
-                        <p class="text-slate-600 mt-1 whitespace-pre-line">${tabData.pitfalls}</p>
-                    </div>`;
-            } else if(tabData.title && tabData.terms) { // for Terminology
-                 contentHTML += `
-                    <div class="p-4 bg-slate-50 rounded-lg">
-                        <h4 class="font-semibold text-slate-800 capitalize">${tabData.title}</h4>
-                        <p class="text-slate-600 mt-1 whitespace-pre-line">${tabData.terms}</p>
-                    </div>`;
-            } else if(tabData.title && tabData.types) { // For Content Types
-                contentHTML += `
-                    <div class="p-4 bg-slate-50 rounded-lg">
-                        <h4 class="font-semibold text-slate-800 capitalize">${tabData.title}</h4>
-                        <div class="text-slate-600 mt-1 whitespace-pre-line">${tabData.types.replace(/\*\*/g, '<strong class="font-semibold text-slate-700">')}</div>
-                    </div>`;
-
-            } else {
+            } else { // General sections are key-value pairs.
                  for (const [key, value] of Object.entries(tabData)) {
                     contentHTML += `
                         <div class="p-4 bg-slate-50 rounded-lg">
                             <h4 class="font-semibold text-slate-800 capitalize">${key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1')}</h4>
-                            <p class="text-slate-600 mt-1">${value}</p>
+                            <p class="text-slate-600 mt-1 whitespace-pre-wrap">${value}</p>
                         </div>
                     `;
                 }
             }
 
 
+            // Add the AI "Generate Insights" button specifically to the culture tab.
             if (currentState.selectedTab === 'culture') {
                 contentHTML += `<div id="culture-insights-container" class="mt-4"><button id="culture-btn" onclick="getCulturalInsights()" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">✨ Generate Cultural Insights</button><div id="culture-output" class="p-4 bg-indigo-50 text-indigo-800 rounded-lg hidden mt-4"></div></div>`;
             }
             contentHTML += '</div>';
             
             tabContent.innerHTML = contentHTML;
+            // Trigger fade-in animation for new content.
             tabContent.classList.remove('fade-in');
             void tabContent.offsetWidth; 
             tabContent.classList.add('fade-in');
         }
 
+        /**
+         * Renders the comparison table based on the selected countries and comparison point.
+         * This table ALWAYS uses the general guidelines for a baseline comparison.
+         */
         function renderComparisonTable() {
             const topicKey = currentState.selectedComparison;
             let tableHTML = `<div class="relative overflow-x-auto shadow-md sm:rounded-lg"><table class="w-full text-sm text-left text-slate-500"><thead class="text-xs text-slate-700 uppercase bg-slate-100"><tr><th scope="col" class="px-6 py-3">Language</th><th scope="col" class="px-6 py-3">Guideline</th></tr></thead><tbody>`;
@@ -510,12 +569,19 @@
             comparisonTableContainer.innerHTML = tableHTML;
         }
 
+        /**
+         * Handles clicks on the main navigation tabs.
+         * @param {string} tab - The key of the tab that was clicked.
+         */
         function handleTabClick(tab) {
             currentState.selectedTab = tab;
             renderTabs();
             renderTabContent();
         }
         
+        /**
+         * Central function to update the entire UI when state changes.
+         */
         function updateUI() {
             const clientName = currentState.selectedClient === 'generalGuidelines' ? 'General Guidelines' : localizationData.clientProfiles[currentState.selectedClient].name;
             explorerTitle.textContent = `${clientName}: Guideline Explorer`;
@@ -523,14 +589,18 @@
             renderTabContent();
         }
 
+        // EVENT LISTENERS
+        // =================================================================================
+
         clientSelect.addEventListener('change', (e) => {
             currentState.selectedClient = e.target.value;
-            currentState.selectedTab = 'tone';
+            currentState.selectedTab = 'tone'; // Reset to a safe default tab
             updateUI();
         });
 
         languageSelect.addEventListener('change', (e) => {
             currentState.selectedLanguage = e.target.value;
+            // Check if the current tab is valid in the new context, otherwise reset.
             const generalTabs = ['tone', 'punctuation', 'formatting', 'grammar', 'measures', 'contact', 'legal', 'culture'];
             const clientTabs = ['terminology', 'personas', 'visualGuidelines', 'commonPitfalls', 'contentTypes'];
             const availableTabs = currentState.selectedClient === 'generalGuidelines' ? generalTabs : [...generalTabs, ...clientTabs];
@@ -541,9 +611,29 @@
         });
 
         comparisonSelect.addEventListener('change', (e) => { currentState.selectedComparison = e.target.value; renderComparisonTable(); });
-        countryFilterButton.addEventListener('click', (event) => { event.stopPropagation(); countryFilterDropdown.classList.toggle('hidden'); });
-        window.addEventListener('click', (e) => { if (!countryFilterButton.contains(e.target) && !countryFilterDropdown.contains(e.target)) { countryFilterDropdown.classList.add('hidden'); } });
+        
+        // Logic to toggle the country filter dropdown.
+        countryFilterButton.addEventListener('click', (event) => { 
+            event.stopPropagation(); 
+            countryFilterDropdown.classList.toggle('hidden'); 
+        });
+        
+        // Logic to close the dropdown if clicking outside of it.
+        window.addEventListener('click', (e) => { 
+            if (!countryFilterButton.contains(e.target) && !countryFilterDropdown.contains(e.target)) { 
+                countryFilterDropdown.classList.add('hidden'); 
+            } 
+        });
 
+        // AI-POWERED FUNCTIONS
+        // =================================================================================
+
+        /**
+         * Generic function to call the Gemini API.
+         * @param {string} prompt - The prompt to send to the AI model.
+         * @param {HTMLElement} button - The button that triggered the call, for disabling/enabling.
+         * @param {HTMLElement} outputElement - The element where the response will be displayed.
+         */
         async function callGemini(prompt, button, outputElement) {
             const originalButtonText = button.innerHTML;
             button.disabled = true; button.innerHTML = '<div class="spinner"></div> Generating...';
@@ -561,20 +651,37 @@
             } finally { button.disabled = false; button.innerHTML = originalButtonText; }
         }
 
+        /**
+         * Gets tone advice from the AI based on the current client and language context.
+         */
         async function getToneAdvice() {
             const toneInput = document.getElementById('tone-input'); const userText = toneInput.value.trim();
             if (!userText) { const toneOutput = document.getElementById('tone-output'); toneOutput.classList.remove('hidden'); toneOutput.textContent = "Please enter some text to analyze."; return; }
+            
+            // Construct a detailed prompt using the merged tone data.
             const toneData = getSectionData('tone');
-            const toneDescription = toneData.primary + " " + toneData.formality;
+            let toneDescription = toneData.primary;
+            if (toneData.details) {
+                toneDescription += "\n\nSpecific guidelines:\n" + toneData.details;
+            }
+            if (toneData.formality) {
+                toneDescription += "\n\nFormality: " + toneData.formality;
+            }
             const prompt = `As an expert in localization for ${currentState.selectedLanguage}, review the following text: "${userText}". The target tone is: "${toneDescription}". Provide clear, actionable suggestions in bullet points on how to better align the text with this tone. If the text is already well-aligned, confirm that and explain why.`;
             await callGemini(prompt, document.getElementById('tone-submit'), document.getElementById('tone-output'));
         }
 
+        /**
+         * Gets general cultural insights for the selected language.
+         */
         async function getCulturalInsights() {
             const prompt = `You are a localization expert. Provide 3 key cultural insights for a content writer creating marketing material for ${currentState.selectedLanguage}. Focus on humor, sensitive topics, common values, and important holidays or events. Present these in bullet points.`;
             await callGemini(prompt, document.getElementById('culture-btn'), document.getElementById('culture-output'));
         }
         
+        /**
+         * Initializes the application on page load.
+         */
         function init() {
             populateClientSelect();
             populateLanguageSelect();
@@ -585,6 +692,7 @@
             renderComparisonTable();
         }
 
+        // Run the initialization function when the window loads.
         window.onload = init;
     </script>
 </body>
