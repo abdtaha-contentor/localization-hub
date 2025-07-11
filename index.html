@@ -513,7 +513,7 @@
                  contentHTML += `
                     <div class="p-4 bg-slate-50 rounded-lg">
                         <h4 class="font-semibold text-slate-800 capitalize">${tabData.title}</h4>
-                        <div class="text-slate-600 mt-1 whitespace-pre-line">${(tabData.description || tabData.guidelines || tabData.pitfalls || tabData.terms || tabData.types).replace(/\*\*/g, '<strong class="font-semibold text-slate-700">')}</div>
+                        <div class="text-slate-600 mt-1 whitespace-pre-line">${(tabData.description || tabData.guidelines || tabData.pitfalls || tabData.terms || tabData.types).replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-slate-700">$1</strong>')}</div>
                     </div>`;
             } else { // General sections are key-value pairs.
                  for (const [key, value] of Object.entries(tabData)) {
