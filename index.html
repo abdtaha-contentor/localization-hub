@@ -645,7 +645,7 @@
             outputElement.classList.remove('hidden'); outputElement.innerHTML = '<div class="flex justify-center items-center"><div class="spinner"></div><span class="ml-2">Fetching AI insights...</span></div>';
             
             // IMPORTANT: Replace "" with your actual API key for deployment.
-            const apiKey = ""; 
+            const apiKey = "AIzaSyDGyzSLLmDeNhqiK21Iy_nNtrFnmaCf4Tc"; 
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
             const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
             
