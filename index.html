@@ -511,12 +511,14 @@
 
             let contentHTML = '<div class="space-y-4">';
 
-            // Client-specific sections have a different structure (title + long text).
+             // Client-specific sections have a different structure (title + long text).
             if(tabData.title && (tabData.description || tabData.guidelines || tabData.pitfalls || tabData.terms || tabData.types)) { 
+                const content = (tabData.description || tabData.guidelines || tabData.pitfalls || tabData.terms || tabData.types);
+                const formattedContent = content.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-slate-700">$1</strong>');
                  contentHTML += `
                     <div class="p-4 bg-slate-50 rounded-lg">
                         <h4 class="font-semibold text-slate-800 capitalize">${tabData.title}</h4>
-                        <div class="text-slate-600 mt-1 whitespace-pre-line">${(tabData.description || tabData.guidelines || tabData.pitfalls || tabData.terms || tabData.types).replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-slate-700">$1</strong>')}</div>
+                        <div class="text-slate-600 mt-1 whitespace-pre-line">${formattedContent}</div>
                     </div>`;
             } else { // General sections are key-value pairs.
                  for (const [key, value] of Object.entries(tabData)) {
@@ -641,14 +643,50 @@
             const originalButtonText = button.innerHTML;
             button.disabled = true; button.innerHTML = '<div class="spinner"></div> Generating...';
             outputElement.classList.remove('hidden'); outputElement.innerHTML = '<div class="flex justify-center items-center"><div class="spinner"></div><span class="ml-2">Fetching AI insights...</span></div>';
-            const apiKey = "AIzaSyDGyzSLLmDeNhqiK21Iy_nNtrFnmaCf4Tc"; const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            
+            // IMPORTANT: Replace "" with your actual API key for deployment.
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
             const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+            
             try {
                 const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                
+                if (!response.ok) {
+                    throw new Error(`API call failed with status: ${response.status}`);
+                }
+
                 const result = await response.json();
                 if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
-                    let text = result.candidates[0].content.parts[0].text.replace(/\n\*/g, '</li><li>').replace(/\* /g, '<li>').replace(/<\/li><li>/g, '</li><li>').replace(/^<li>/, '<ul><li>') + '</li></ul>';
-                    outputElement.innerHTML = text;
+                    let text = result.candidates[0].content.parts[0].text;
+                    // Improved formatting logic
+                    let html = '';
+                    let inList = false;
+                    const lines = text.split('\n');
+                    for (const line of lines) {
+                        const trimmedLine = line.trim();
+                        if (trimmedLine.startsWith('* ') || trimmedLine.startsWith('• ')) {
+                            if (!inList) {
+                                html += '<ul>';
+                                inList = true;
+                            }
+                            const listItemText = trimmedLine.substring(2).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                            html += `<li>${listItemText}</li>`;
+                        } else {
+                            if (inList) {
+                                html += '</ul>';
+                                inList = false;
+                            }
+                            if (trimmedLine) {
+                                const paragraphText = trimmedLine.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                                html += `<p>${paragraphText}</p>`;
+                            }
+                        }
+                    }
+                    if (inList) {
+                        html += '</ul>';
+                    }
+                    outputElement.innerHTML = html;
                 } else { outputElement.textContent = "Sorry, couldn't get a response. Please try again later."; }
             } catch (error) { console.error("Gemini API call failed:", error); outputElement.textContent = "An error occurred. Please check the console for details.";
             } finally { button.disabled = false; button.innerHTML = originalButtonText; }
@@ -681,6 +719,7 @@
             const prompt = `You are a localization expert. Provide 3 key cultural insights for a content writer creating marketing material for ${currentState.selectedLanguage}. Focus on humor, sensitive topics, common values, and important holidays or events. Present these in bullet points.`;
             await callGemini(prompt, document.getElementById('culture-btn'), document.getElementById('culture-output'));
         }
+        
         
         /**
          * Initializes the application on page load.
