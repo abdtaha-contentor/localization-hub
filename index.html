@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Localization Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chosen Palette: Slate & Indigo -->
+    <!-- Chosen Palette: Slate & Custom Green -->
     <!-- Application Structure Plan: A client-centric "Localization Hub" with a two-tiered data structure. A top-level dropdown switches between "General Guidelines" and specific client profiles (Visa, Samsung, Dyson, Rusta). Selecting a client dynamically updates all content, pulling from client-specific overrides and falling back to general guidelines. New client-exclusive tabs for Terminology, Personas, Visuals, etc., are added. The AI Tone Advisor is enhanced to be client-aware, tailoring its advice based on the selected client's brand voice. This creates a powerful, scalable tool for a multi-client agency. -->
     <!-- Visualization & Content Choices: Data is presented in interactive tabbed cards. The core logic is rewritten to handle the new data structure, merging general and client-specific rules on the fly. No charts are used, focusing on detailed textual guidelines and AI-powered dynamic content generation. All choices avoid SVG/Mermaid. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
@@ -15,9 +15,9 @@
         }
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         .tab-button.active {
-            border-color: #4f46e5;
-            color: #4f46e5;
-            background-color: #eef2ff;
+            border-color: #34a228;
+            color: #34a228;
+            background-color: #f0fdf4;
         }
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
@@ -28,7 +28,7 @@
         }
         .spinner {
             border: 2px solid #f3f3f3;
-            border-top: 2px solid #4f46e5;
+            border-top: 2px solid #34a228;
             border-radius: 50%;
             width: 16px;
             height: 16px;
@@ -52,12 +52,12 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div>
                 <label for="client-select" class="block text-sm font-medium text-slate-700 mb-2">Select Profile:</label>
-                <select id="client-select" class="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                <select id="client-select" class="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-[#34a228] focus:border-[#34a228]">
                 </select>
             </div>
              <div>
                 <label for="language-select" class="block text-sm font-medium text-slate-700 mb-2">Select Language:</label>
-                <select id="language-select" class="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                <select id="language-select" class="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-[#34a228] focus:border-[#34a228]">
                 </select>
             </div>
         </div>
@@ -83,7 +83,7 @@
                 <p class="text-slate-600 mb-6">Paste your text below to get AI-powered suggestions on how to align it with the selected language and client profile's tone of voice.</p>
                 <div class="space-y-4">
                     <textarea id="tone-input" class="w-full p-2 border border-slate-300 rounded-md" rows="4" placeholder="Enter your text here..."></textarea>
-                    <button id="tone-submit" onclick="getToneAdvice()" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button id="tone-submit" onclick="getToneAdvice()" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#34a228] hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#34a228]">
                         Get Tone Advice
                     </button>
                     <div id="tone-output" class="p-4 bg-slate-50 rounded-lg hidden mt-4"></div>
@@ -96,7 +96,7 @@
                  <div class="grid md:grid-cols-2 gap-6 mb-6">
                     <div>
                         <label for="comparison-select" class="block text-sm font-medium text-slate-700 mb-2">Select Style Point to Compare:</label>
-                        <select id="comparison-select" class="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        <select id="comparison-select" class="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-[#34a228] focus:border-[#34a228]">
                         </select>
                     </div>
                     <div class="relative">
@@ -400,8 +400,8 @@
          */
         function populateCountryFilter() {
             const allLanguages = Object.keys(localizationData.generalGuidelines).sort();
-            let filterHTML = `<div class="p-2 flex justify-between border-b border-gray-200"><button id="filter-select-all" class="text-sm text-indigo-600 hover:text-indigo-800">Select All</button><button id="filter-deselect-all" class="text-sm text-indigo-600 hover:text-indigo-800">Deselect All</button></div><div class="space-y-1 p-1">`;
-            filterHTML += allLanguages.map(lang => `<div class="flex items-center p-1 rounded-md hover:bg-slate-100"><input id="filter-${lang}" name="country-filter" type="checkbox" value="${lang}" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" checked><label for="filter-${lang}" class="ml-2 block text-sm text-gray-900 w-full cursor-pointer">${lang}</label></div>`).join('');
+            let filterHTML = `<div class="p-2 flex justify-between border-b border-gray-200"><button id="filter-select-all" class="text-sm text-green-600 hover:text-green-800">Select All</button><button id="filter-deselect-all" class="text-sm text-green-600 hover:text-green-800">Deselect All</button></div><div class="space-y-1 p-1">`;
+            filterHTML += allLanguages.map(lang => `<div class="flex items-center p-1 rounded-md hover:bg-slate-100"><input id="filter-${lang}" name="country-filter" type="checkbox" value="${lang}" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500" checked><label for="filter-${lang}" class="ml-2 block text-sm text-gray-900 w-full cursor-pointer">${lang}</label></div>`).join('');
             filterHTML += `</div>`;
             countryFilterDropdown.innerHTML = filterHTML;
 
@@ -483,7 +483,7 @@
             tabsContainer.innerHTML = tabsToRender.map(key => {
                 return `
                 <button onclick="handleTabClick('${key}')" class="tab-button ${currentState.selectedTab === key ? 'active' : ''} flex items-center gap-2 whitespace-nowrap border-b-2 py-3 px-4 text-sm font-medium border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700">
-                     <span class="text-indigo-600 font-bold">${tabIcons[key]}</span> ${key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
+                     <span class="text-[#34a228] font-bold">${tabIcons[key]}</span> ${key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
                 </button>
             `}).join('');
         }
@@ -534,7 +534,7 @@
 
             // Add the AI "Generate Insights" button specifically to the culture tab.
             if (currentState.selectedTab === 'culture') {
-                contentHTML += `<div id="culture-insights-container" class="mt-4"><button id="culture-btn" onclick="getCulturalInsights()" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">✨ Generate Cultural Insights</button><div id="culture-output" class="p-4 bg-indigo-50 text-indigo-800 rounded-lg hidden mt-4"></div></div>`;
+                contentHTML += `<div id="culture-insights-container" class="mt-4"><button id="culture-btn" onclick="getCulturalInsights()" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#34a228] hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">✨ Generate Cultural Insights</button><div id="culture-output" class="p-4 bg-green-50 text-green-800 rounded-lg hidden mt-4"></div></div>`;
             }
             contentHTML += '</div>';
             
