@@ -587,14 +587,24 @@
                 const formattedContent = content.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-slate-700">$1</strong>');
                  contentHTML += `
                     <div class="p-4 bg-slate-50 rounded-lg">
-                        <h4 class="font-semibold text-slate-800 capitalize">${tabData.title}</h4>
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-semibold text-slate-800 capitalize">${tabData.title}</h4>
+                            <button onclick="openFeedbackModal(true, '${tabData.title}', '${tabData.title}', '${content.replace(/'/g, "\\'").replace(/"/g, '\\"')}')" class="text-slate-400 hover:text-[#34a228]">
+                                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" /></svg>
+                            </button>
+                        </div>
                         <div class="text-slate-600 mt-1 whitespace-pre-line">${formattedContent}</div>
                     </div>`;
             } else { // General sections are key-value pairs.
                  for (const [key, value] of Object.entries(tabData)) {
                     contentHTML += `
                         <div class="p-4 bg-slate-50 rounded-lg">
-                            <h4 class="font-semibold text-slate-800 capitalize">${key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1')}</h4>
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-semibold text-slate-800 capitalize">${key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1')}</h4>
+                                <button onclick="openFeedbackModal(false, '${currentState.selectedTab}', '${key}', '${String(value).replace(/'/g, "\\'").replace(/"/g, '\\"')}')" class="text-slate-400 hover:text-[#34a228]">
+                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" /></svg>
+                                </button>
+                            </div>
                             <p class="text-slate-600 mt-1 whitespace-pre-wrap">${value}</p>
                         </div>
                     `;
